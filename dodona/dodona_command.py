@@ -77,10 +77,10 @@ class DodonaException(Exception):
     """
 
     def __init__(
-        self,
-        status: Dict[str, str],
-        *args,
-        **kwargs,
+            self,
+            status: Dict[str, str],
+            *args,
+            **kwargs,
     ):
         super().__init__()
         self.status = status
@@ -172,10 +172,10 @@ class DodonaCommand(ABC):
         return False
 
     def __exit__(
-        self,
-        exc_type: Type[BaseException],
-        exc_val: BaseException,
-        exc_tb: TracebackType,
+            self,
+            exc_type: Type[BaseException],
+            exc_val: BaseException,
+            exc_tb: TracebackType,
     ) -> bool:
         """print the close message when exiting the 'with' block & handle enclosed exceptions
         If a DodonaException was thrown in the enclosed 'with' block, the 'handle_dodona_exception'
@@ -198,7 +198,8 @@ class DodonaCommandWithAccepted(DodonaCommand):
     def handle_dodona_exception(self, exception: DodonaException) -> bool:
         """update the accepted parameter based on the exception status"""
         if not hasattr(self.close_args, "accepted"):
-            accepted = exception.status["enum"] == ErrorType.CORRECT or exception.status["enum"] == ErrorType.CORRECT_ANSWER
+            accepted = exception.status["enum"] == ErrorType.CORRECT or exception.status[
+                "enum"] == ErrorType.CORRECT_ANSWER
             self.close_args.accepted = accepted
 
         return super().handle_dodona_exception(exception)

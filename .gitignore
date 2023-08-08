@@ -140,3 +140,6 @@ cython_debug/
 # Ignore PyCharm & VSCode auto-generated directories
 .idea/
 .vscode/
+
+# Submission data
+/workdir
