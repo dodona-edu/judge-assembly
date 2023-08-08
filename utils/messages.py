@@ -18,6 +18,18 @@ def invalid_suites(judge: SimpleNamespace, config: DodonaConfig):
     judge.accepted = False
 
 
+def compile_error(judge: SimpleNamespace, config: DodonaConfig, compile_error_message: str):
+    """Show the students a message saying that the compilation failed"""
+    with Message(
+            description=compile_error_message,
+            format=MessageFormat.TEXT
+    ):
+        pass
+
+    judge.status = config.translator.error_status(ErrorType.COMPILATION_ERROR)
+    judge.accepted = False
+
+
 def invalid_evaluator_file(exception: Exception):
     """Show the teacher a message saying that their evaluator file is invalid"""
     with Message(

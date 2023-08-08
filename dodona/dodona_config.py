@@ -3,7 +3,35 @@
 import json
 import os
 from types import SimpleNamespace
-from typing import TextIO
+from typing import Any, TextIO
+from enum import Enum
+
+
+class AssemblyLanguage(Enum):
+    X86_32_ATT = "x86-32-at&t"
+    X86_32_INTEL = "x86-32-intel"
+    X86_64_ATT = "x86-64-at&t"
+    X86_64_INTEL = "x86-64-intel"
+    ARM_32 = "arm-32"
+    ARM_64 = "arm-64"
+
+
+class JudgeSpecificConfigOptions(SimpleNamespace):
+    """a class for containing all assembly judge specific options
+    Attributes:
+        assembly:               The assembly language used by the exercise.
+        tested_function:        The name of the function that will be tested.
+        test_iterations:        How many times each test will be run.
+    """
+
+    def __init__(self, **kwargs: Any) -> None:
+        """store all parameters & set correct type for 'known' assembly judge options
+        :param kwargs: the named parameters in the form of a dict
+        """
+        super().__init__(**kwargs)
+        self.assembly = AssemblyLanguage(self.assembly)
+        self.tested_function = str(self.tested_function)
+        self.test_iterations = int(self.test_iterations)
 
 
 # pylint: disable=too-many-instance-attributes
@@ -25,8 +53,9 @@ class DodonaConfig(SimpleNamespace):
         resources:              Full path to a directory containing the resources for the evaluation.
                                 This is the "evaluation" directory of an exercise.
         source:                 Full path to a file containing the code the user submitted.
-        judge:                  Full path to a directory containing a copy of the judge repository.
         workdir:                Full path to the directory in which all user code should be executed.
+        plan_name:              The test evaluation plan.
+        options:                Options specific to the assembly aspect of the judge.
     """
 
     def __init__(self, **kwargs):
@@ -40,8 +69,13 @@ class DodonaConfig(SimpleNamespace):
         self.natural_language = str(self.natural_language)
         self.resources = str(self.resources)
         self.source = str(self.source)
-        self.judge = str(self.judge)
         self.workdir = str(self.workdir)
+        self.plan_name = str(self.plan_name)
+        self.options = JudgeSpecificConfigOptions(
+            assembly = self.options.assembly,
+            tested_function = self.options.tested_function,
+            test_iterations = self.options.test_iterations
+        )
 
     @classmethod
     def from_json(cls, json_file: TextIO) -> "DodonaConfig":
@@ -56,12 +90,7 @@ class DodonaConfig(SimpleNamespace):
         """perform sanity checks
         This function checks if the Python file is executed correctly. The current working dir
         should be the same directory that is passed as the 'workdir' property in the Dodona config.
-        Also, this Python file (and all other Python judge files) should be located in the 'judge' dir.
         """
         # Make sure that the current working dir is the workdir
         cwd = os.getcwd()
         assert os.path.realpath(cwd) == os.path.realpath(self.workdir)
-
-        # Make sure that this file is located right below the judge folder
-        script_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-        assert os.path.realpath(script_path) == os.path.realpath(self.judge), f"{os.path.realpath(script_path)} | {os.path.realpath(self.judge)}"

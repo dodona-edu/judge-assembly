@@ -1,0 +1,22 @@
+{
+	"description": {
+		"names": {
+			"en": "Narayana",
+			"nl": "Narayana"
+		}
+	},
+	"programming_language": "assembly",
+	"access": "private",
+	"natural_language": "en",
+	"resources": "sample-exercise/",
+	"source": "/run/media/niels/MoreData/assembly-toolbox/judge-assembly/sample-exercise/solution/originalx86-32.s",
+	"plan_name": "/run/media/niels/MoreData/assembly-toolbox/judge-assembly/sample-exercise/evaluation/plan.json",
+	"workdir": "/run/media/niels/MoreData/assembly-toolbox/judge-assembly/workdir/",
+	"memory_limit": 10000000,
+	"time_limit": 30,
+	"options": {
+		"assembly": "x86-32-at&t",
+		"tested_function": "narayana",
+		"test_iterations": 1000
+	}
+}

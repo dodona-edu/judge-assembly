@@ -2,6 +2,10 @@
 util file with functions to load specific types of files
 """
 
+def text_loader(file_path: str) -> str:
+    with open(file_path, "r") as file:
+        return file.read()
+
 
 def html_loader(file_path: str, **kwargs) -> str:
     """Utility function to load a HTML file in order to use the content

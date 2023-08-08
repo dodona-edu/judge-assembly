@@ -3,15 +3,18 @@ import sys
 from typing import List, Optional
 
 from dodona.dodona_command import Judgement, Message, ErrorType, Tab, MessageFormat
-from dodona.dodona_config import DodonaConfig
+from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from exceptions.utils import InvalidTranslation
 from utils.evaluation_module import EvaluationModule
-from utils.file_loaders import html_loader
+from utils.file_loaders import html_loader, text_loader
+from exceptions.evaluation_exceptions import ValidationError
 from validators import checks
 from validators.checks import TestSuite
 from utils.render_ready import prep_render
-from utils.messages import invalid_suites, invalid_evaluator_file, missing_create_suite, missing_evaluator_file, no_suites_found
+from utils.messages import invalid_suites, invalid_evaluator_file, missing_create_suite, missing_evaluator_file, no_suites_found, compile_error
+from evaluation.compilation import run_compilation
+from os import path
 
 
 def main():
@@ -28,10 +31,29 @@ def main():
 
         # Perform sanity check
         config.sanity_check()
+
         # Initiate translator
         config.translator = Translator.from_str(config.natural_language)
-        # Load HTML
-        html_content: str = html_loader(config.source, shorted=False)
+
+        # Prepend the global annotation for the submission entry point
+        submission_content = text_loader(config.source)
+        submission_content = ".globl " + config.options.tested_function + "\n" + submission_content
+        submission_file = path.join(config.workdir, "submission.s")
+        with open(submission_file, "w") as modified_submission_file:
+            modified_submission_file.write(submission_content)
+
+        # Compile code
+        try:
+            run_compilation(config.translator, submission_file, config.workdir, config.plan_name, config.options)
+        except ValidationError as validation_error:
+            compile_error(judge, config, validation_error.msg)
+            return
+
+        # Run the tests
+        with Tab('Tests'):
+            pass
+
+        assert False
 
         # Compile evaluator code & create test suites
         # If anything goes wrong, show a detailed error message to the teacher
@@ -39,7 +61,7 @@ def main():
         try:
             evaluator: Optional[EvaluationModule] = EvaluationModule.build(config)
             if evaluator is not None:
-                test_suites: List[TestSuite] = evaluator.create_suites(html_content)
+                test_suites: List[TestSuite] = evaluator.create_suites(submitted_content)
             else:
                 solution = html_loader(os.path.join(config.resources, "./solution.html"))
                 if not solution:
@@ -47,7 +69,7 @@ def main():
                     invalid_suites(judge, config)
                     return
                 # compare(sol, html_content, config.translator)
-                suite = checks._CompareSuite(html_content, solution, config, check_recommended=getattr(config, "recommended", True))
+                suite = checks._CompareSuite(submitted_content, solution, config, check_recommended=getattr(config, "recommended", True))
                 test_suites = [suite]
         except FileNotFoundError:
             # solution.html is missing
@@ -101,7 +123,7 @@ def main():
 
         # Only render out valid HTML on Dodona
         if html_validated:
-            title, html = prep_render(html_content, render_css=css_validated)
+            title, html = prep_render(submitted_content, render_css=css_validated)
             with Tab(f"Rendered{f': {title}' if title else ''}"):
                 with Message(format=MessageFormat.HTML, description=html):
                     pass

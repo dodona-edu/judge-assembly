@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script that runs the HTML judge inside a container.
+# Script that runs the assembly judge inside a container.
 # 
 #   - stdin: run configuration (JSON)
 #   - stdout: evaluation results (JSON)
@@ -9,4 +9,4 @@
 
 DIR="$(dirname $0)"
 
-python "$DIR/html_judge.py"
+python "$DIR/assembly_judge.py"
