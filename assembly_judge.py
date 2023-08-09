@@ -90,7 +90,7 @@ def main():
                             accepted = simulated_total_cycles <= test.max_cycles
                             with Test(
                                 description=config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                expected=str(test.max_cycles),
+                                expected="<= " + str(test.max_cycles),
                             ) as dodona_test:
                                 # TODO: somehow factor out with above code?
                                 dodona_test.generated = str(simulated_total_cycles)
