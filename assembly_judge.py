@@ -3,7 +3,7 @@ import sys
 from typing import List, Optional
 from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, MessageFormat
+from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, Annotation, MessageFormat
 from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from exceptions.utils import InvalidTranslation
@@ -56,6 +56,10 @@ def main():
         try:
             test_program_path = run_compilation(config.translator, submission_file, config.judge, config.workdir, plan, config)
         except ValidationError as validation_error:
+            for error_message in validation_error.msg.split('\n'):
+                with Message(description=error_message, format=MessageFormat.CODE):
+                    with Annotation(row=10, text="foo", type="error"):
+                        pass
             compile_error(judge, config, validation_error.msg)
             return
 
