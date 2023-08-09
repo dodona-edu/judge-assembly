@@ -41,6 +41,7 @@ class DodonaConfig(SimpleNamespace):
         assembly:               The assembly language used by the exercise.
         tested_function:        The name of the function that will be tested.
         test_iterations:        How many times each test will be run.
+        measure_performance:    Measure performance in cycles.
     """
 
     def __init__(self, **kwargs):
@@ -60,6 +61,7 @@ class DodonaConfig(SimpleNamespace):
         self.assembly = AssemblyLanguage(self.assembly)
         self.tested_function = str(self.tested_function)
         self.test_iterations = int(self.test_iterations)
+        self.measure_performance = bool(self.measure_performance)
 
     @classmethod
     def from_json(cls, json_file: TextIO) -> "DodonaConfig":

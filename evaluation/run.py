@@ -12,16 +12,14 @@ class TestResult:
     generated: str
 
 
-def run_test(translator: Translator, workdir_path: str, test_program_path: str, test_id: int, test: SimpleNamespace, config: DodonaConfig):
+# TODO: I guess we should cleanup the arguments as we're passing the config anyway (idem for compilation)
+def run_test(translator: Translator, workdir_path: str, test_program_path: str, test_id: int, config: DodonaConfig):
     # TODO: option to toggle on/off the time measurements?
     # TODO: option to choose your desired cycles for memory vs non-memory?
-    # TODO: test argument can be dropped?
 
     command = [test_program_path, str(test_id)]
-    measure_performance = True # TODO
 
-
-    if measure_performance:
+    if config.measure_performance:
         # TODO: depends on arch
         command = ["valgrind", "--tool=cachegrind", "--cache-sim=yes", "--log-file=/dev/null", "--cachegrind-out-file=timing.out", "--quiet"] + command
 
@@ -37,7 +35,7 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
     if run_result.returncode != 0:
         raise TestRuntimeError(translator, 0, -1)
 
-    if measure_performance:
+    if config.measure_performance:
         target = f"fn={config.tested_function}\n"
         instruction_count = 0
         data_read_count = 0
@@ -55,6 +53,4 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
                     break
         #print(instruction_count, data_read_count, data_write_count)
 
-    #output = (type(test.expected_return_value))(run_result.stdout)
-    #print(test.expected_return_value, output)
     return TestResult(generated=run_result.stdout)
