@@ -78,8 +78,8 @@ def main():
                             dodona_test.accepted = accepted
                             dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
                     except TestRuntimeError as e:
-                        # TODO
-                        print(e)
+                        with Message(str(e)):
+                            pass
 
                     test_context.accepted = accepted
                     test_case.accepted = accepted
