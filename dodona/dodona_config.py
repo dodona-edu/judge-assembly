@@ -5,6 +5,7 @@ import os
 from types import SimpleNamespace
 from typing import Any, TextIO
 from enum import Enum
+import sys
 
 
 class AssemblyLanguage(Enum):
@@ -70,6 +71,7 @@ class DodonaConfig(SimpleNamespace):
         self.resources = str(self.resources)
         self.source = str(self.source)
         self.workdir = str(self.workdir)
+        print(self, file=sys.stderr)
         self.plan_name = str(self.plan_name)
         self.options = JudgeSpecificConfigOptions(
             assembly = self.options.assembly,
