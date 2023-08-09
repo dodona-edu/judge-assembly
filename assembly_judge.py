@@ -18,6 +18,7 @@ from utils.messages import invalid_suites, invalid_evaluator_file, missing_creat
 from evaluation.compilation import run_compilation
 from evaluation.run import run_test
 import json
+import re
 
 
 def main():
@@ -58,7 +59,8 @@ def main():
         except ValidationError as validation_error:
             for error_message in validation_error.msg.split('\n'):
                 with Message(description=error_message, format=MessageFormat.CODE):
-                    with Annotation(row=10, text="foo", type="error"):
+                    matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
+                    with Annotation(row=int(matches.group(1)), text=matches.group(2), type="error"):
                         pass
             compile_error(judge, config, validation_error.msg)
             return
