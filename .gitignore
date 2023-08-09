@@ -142,7 +142,4 @@ cython_debug/
 .vscode/
 
 # Submission data
-workdir/main.c
-workdir/program
-workdir/submission.s
-workdir/*.out
+/workdir

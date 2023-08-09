@@ -49,12 +49,13 @@ def main():
 
         # Load test plan
         # TODO: validate arg types?
+        raise Exception(str(config))
         with open(os.path.join(config.judge, config.plan_name), "r") as plan_file:
             plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
 
         # Compile code
         try:
-            test_program_path = run_compilation(config.translator, submission_file, config.workdir, plan, config)
+            test_program_path = run_compilation(config.translator, submission_file, config.judge, config.workdir, plan, config)
         except ValidationError as validation_error:
             compile_error(judge, config, validation_error.msg)
             return
