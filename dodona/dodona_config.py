@@ -74,8 +74,12 @@ class DodonaConfig(SimpleNamespace):
         """perform sanity checks
         This function checks if the Python file is executed correctly. The current working dir
         should be the same directory that is passed as the 'workdir' property in the Dodona config.
+        Also, this Python file (and all other Python judge files) should be located in the 'judge' dir.
         """
-        # TODO: restore old sanity checks
         # Make sure that the current working dir is the workdir
         cwd = os.getcwd()
         assert os.path.realpath(cwd) == os.path.realpath(self.workdir)
+
+        # Make sure that this file is located right below the judge folder
+        script_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        assert os.path.realpath(script_path) == os.path.realpath(self.judge), f"{os.path.realpath(script_path)} | {os.path.realpath(self.judge)}"
