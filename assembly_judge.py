@@ -3,7 +3,7 @@ import sys
 from typing import List, Optional
 from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, Annotation, MessageFormat
+from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, MessageFormat
 from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from exceptions.utils import InvalidTranslation
