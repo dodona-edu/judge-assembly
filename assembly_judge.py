@@ -58,15 +58,7 @@ def main():
         try:
             test_program_path = run_compilation(config.translator, submission_file, config.judge, config.workdir, plan, config)
         except ValidationError as validation_error:
-            for error_message in validation_error.msg.split('\n'):
-                matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
-                if matches:
-                    with Message(description=matches.group(2), format=MessageFormat.CODE):
-                        with Annotation(row=int(matches.group(1)) - line_shift, text=matches.group(2), type="error"):
-                            pass
-            #compile_error(judge, config, validation_error.msg)
-            judge.status = config.translator.error_status(ErrorType.COMPILATION_ERROR)
-            judge.accepted = False
+            compile_error(judge, config, validation_error.msg, line_shift)
             return
 
         # Run the tests

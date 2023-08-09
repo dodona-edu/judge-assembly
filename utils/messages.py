@@ -18,13 +18,14 @@ def invalid_suites(judge: SimpleNamespace, config: DodonaConfig):
     judge.accepted = False
 
 
-def compile_error(judge: SimpleNamespace, config: DodonaConfig, compile_error_message: str):
+def compile_error(judge: SimpleNamespace, config: DodonaConfig, compile_error_message: str, line_shift: int):
     """Show the students a message saying that the compilation failed"""
-    with Message(
-            description=compile_error_message,
-            format=MessageFormat.TEXT
-    ):
-        pass
+    for error_message in validation_error.msg.split('\n'):
+        matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
+        if matches:
+            with Message(description=matches.group(2), format=MessageFormat.CODE):
+                with Annotation(row=int(matches.group(1)) - line_shift, text=matches.group(2), type="error"):
+                    pass
 
     judge.status = config.translator.error_status(ErrorType.COMPILATION_ERROR)
     judge.accepted = False
