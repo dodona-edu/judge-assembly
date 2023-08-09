@@ -50,7 +50,8 @@ def main():
         # Load test plan
         # TODO: validate arg types?
         #raise Exception(str(config))
-        os.sleep(9000)
+        import time
+        time.sleep(9000)
         with open(os.path.join(config.resources, config.plan_name), "r") as plan_file:
             plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
 
