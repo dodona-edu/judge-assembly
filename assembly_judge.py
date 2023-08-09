@@ -42,7 +42,7 @@ def main():
         submission_content = text_loader(config.source)
         # TODO: size will be wrong if there are multiple functions?
         # TODO: fn=... doesn't work with multiple functions?
-        submission_content = f".globl {config.options.tested_function}\n.type {config.options.tested_function}, @function\n{submission_content}\n.size {config.options.tested_function}, .-{config.options.tested_function}"
+        submission_content = f".globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}"
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
@@ -54,7 +54,7 @@ def main():
 
         # Compile code
         try:
-            test_program_path = run_compilation(config.translator, submission_file, config.workdir, plan, config.options)
+            test_program_path = run_compilation(config.translator, submission_file, config.workdir, plan, config)
         except ValidationError as validation_error:
             compile_error(judge, config, validation_error.msg)
             return
@@ -63,12 +63,12 @@ def main():
         with Tab('Feedback'):
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
-                test_name = f"{config.options.tested_function}({', '.join(map(str, test.arguments))})"
+                test_name = f"{config.tested_function}({', '.join(map(str, test.arguments))})"
                 with Context() as test_context, TestCase(test_name, format="code") as test_case:
                     expected = str(test.expected_return_value)
                     accepted = False
                     try:
-                        test_result = run_test(config.translator, config.workdir, test_program_path, test_id, test, config.options)
+                        test_result = run_test(config.translator, config.workdir, test_program_path, test_id, test, config)
                         accepted = test_result.generated == expected
                     except TestRuntimeError as e:
                         # TODO
