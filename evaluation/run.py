@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from dodona.dodona_config import JudgeSpecificConfigOptions
+from dodona.dodona_config import DodonaConfig
 from dodona.translator import Translator
 from exceptions.evaluation_exceptions import TestRuntimeError
 from dataclasses import dataclass
@@ -12,7 +12,7 @@ class TestResult:
     generated: str
 
 
-def run_test(translator: Translator, workdir_path: str, test_program_path: str, test_id: int, test: SimpleNamespace, options: JudgeSpecificConfigOptions):
+def run_test(translator: Translator, workdir_path: str, test_program_path: str, test_id: int, test: SimpleNamespace, config: DodonaConfig):
     # TODO: option to toggle on/off the time measurements?
     # TODO: option to choose your desired cycles for memory vs non-memory?
     # TODO: test argument can be dropped?
@@ -38,7 +38,7 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
         raise TestRuntimeError(translator, 0, 0)
 
     if measure_performance:
-        target = f"fn={options.tested_function}\n"
+        target = f"fn={config.tested_function}\n"
         instruction_count = 0
         data_read_count = 0
         data_write_count = 0

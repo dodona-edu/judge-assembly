@@ -1,4 +1,4 @@
-from dodona.dodona_config import AssemblyLanguage, JudgeSpecificConfigOptions
+from dodona.dodona_config import AssemblyLanguage, DodonaConfig
 from exceptions.evaluation_exceptions import ValidationError
 from dodona.translator import Translator
 from mako.template import Template
@@ -41,10 +41,10 @@ def write_main_file(workdir_path: str, tested_function: str, test_iterations: in
         ))
 
 
-def run_compilation(translator: Translator, source_file_name: str, workdir_path: str, plan: SimpleNamespace, options: JudgeSpecificConfigOptions) -> str:
-    write_main_file(workdir_path, options.tested_function, options.test_iterations, plan)
+def run_compilation(translator: Translator, source_file_name: str, workdir_path: str, plan: SimpleNamespace, config: DodonaConfig) -> str:
+    write_main_file(workdir_path, config.tested_function, config.test_iterations, plan)
 
-    compile_command, compile_options = determine_compile_command(options.assembly)
+    compile_command, compile_options = determine_compile_command(config.assembly)
     compile_options += [path.join(workdir_path, "main.c"), "-o", "program", source_file_name]
 
     compile_result = subprocess.run(

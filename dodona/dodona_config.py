@@ -17,24 +17,6 @@ class AssemblyLanguage(Enum):
     ARM_64 = "arm-64"
 
 
-class JudgeSpecificConfigOptions(SimpleNamespace):
-    """a class for containing all assembly judge specific options
-    Attributes:
-        assembly:               The assembly language used by the exercise.
-        tested_function:        The name of the function that will be tested.
-        test_iterations:        How many times each test will be run.
-    """
-
-    def __init__(self, **kwargs: Any) -> None:
-        """store all parameters & set correct type for 'known' assembly judge options
-        :param kwargs: the named parameters in the form of a dict
-        """
-        super().__init__(**kwargs)
-        self.assembly = AssemblyLanguage(self.assembly)
-        self.tested_function = str(self.tested_function)
-        self.test_iterations = int(self.test_iterations)
-
-
 # pylint: disable=too-many-instance-attributes
 class DodonaConfig(SimpleNamespace):
     """a class for containing all Dodona Judge configuration
@@ -56,7 +38,9 @@ class DodonaConfig(SimpleNamespace):
         source:                 Full path to a file containing the code the user submitted.
         workdir:                Full path to the directory in which all user code should be executed.
         plan_name:              The test evaluation plan.
-        options:                Options specific to the assembly aspect of the judge.
+        assembly:               The assembly language used by the exercise.
+        tested_function:        The name of the function that will be tested.
+        test_iterations:        How many times each test will be run.
     """
 
     def __init__(self, **kwargs):
@@ -71,13 +55,10 @@ class DodonaConfig(SimpleNamespace):
         self.resources = str(self.resources)
         self.source = str(self.source)
         self.workdir = str(self.workdir)
-        raise Exception(str(self))
         self.plan_name = str(self.plan_name)
-        self.options = JudgeSpecificConfigOptions(
-            assembly = self.options.assembly,
-            tested_function = self.options.tested_function,
-            test_iterations = self.options.test_iterations
-        )
+        self.assembly = AssemblyLanguage(self.assembly)
+        self.tested_function = str(self.tested_function)
+        self.test_iterations = int(self.test_iterations)
 
     @classmethod
     def from_json(cls, json_file: TextIO) -> "DodonaConfig":
