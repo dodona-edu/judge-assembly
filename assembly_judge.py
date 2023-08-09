@@ -49,7 +49,7 @@ def main():
 
         # Load test plan
         # TODO: validate arg types?
-        with open(config.plan_name, "r") as plan_file:
+        with open(os.path.join(config.workdir, config.plan_name), "r") as plan_file:
             plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
 
         # Compile code
