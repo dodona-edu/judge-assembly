@@ -56,6 +56,7 @@ class DodonaConfig(SimpleNamespace):
         self.source = str(self.source)
         self.workdir = str(self.workdir)
         self.plan_name = str(self.plan_name)
+        # TODO: sanity check & print staff message?
         self.assembly = AssemblyLanguage(self.assembly)
         self.tested_function = str(self.tested_function)
         self.test_iterations = int(self.test_iterations)
@@ -74,6 +75,7 @@ class DodonaConfig(SimpleNamespace):
         This function checks if the Python file is executed correctly. The current working dir
         should be the same directory that is passed as the 'workdir' property in the Dodona config.
         """
+        # TODO: restore old sanity checks
         # Make sure that the current working dir is the workdir
         cwd = os.getcwd()
         assert os.path.realpath(cwd) == os.path.realpath(self.workdir)
