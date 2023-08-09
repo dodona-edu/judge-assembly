@@ -70,6 +70,13 @@ def main():
                     try:
                         test_result = run_test(config.translator, config.workdir, test_program_path, test_id, test, config)
                         accepted = test_result.generated == expected
+                        with Test(
+                            description=config.translator.translate(Translator.Text.RETURN_VALUE),
+                            expected=expected
+                        ) as dodona_test:
+                            dodona_test.generated = test_result.generated
+                            dodona_test.accepted = accepted
+                            dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
                     except TestRuntimeError as e:
                         # TODO
                         print(e)
@@ -78,14 +85,6 @@ def main():
                     test_case.accepted = accepted
                     if not accepted:
                         failed_tests += 1
-                    else:
-                        with Test(
-                            description=config.translator.translate(Translator.Text.RETURN_VALUE),
-                            expected=expected
-                        ) as dodona_test:
-                            dodona_test.generated = test_result.generated
-                            dodona_test.accepted = accepted
-                            dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
 
         status = ErrorType.CORRECT if failed_tests == 0 else ErrorType.WRONG
         judge.status = config.translator.error_status(status, amount=failed_tests)
