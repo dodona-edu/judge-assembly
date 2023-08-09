@@ -33,6 +33,7 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
         stderr=subprocess.PIPE,
         universal_newlines=True,
     )
+    print(run_result)
 
     if run_result.returncode != 0:
         raise TestRuntimeError(translator, 0, 0)

@@ -78,14 +78,14 @@ def main():
                     test_case.accepted = accepted
                     if not accepted:
                         failed_tests += 1
-
-                    with Test(
-                        description=config.translator.translate(Translator.Text.RETURN_VALUE),
-                        generated=test_result.generated,
-                        expected=expected
-                    ) as dodona_test:
-                        dodona_test.accepted = accepted
-                        dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
+                    else:
+                        with Test(
+                            description=config.translator.translate(Translator.Text.RETURN_VALUE),
+                            generated=test_result.generated,
+                            expected=expected
+                        ) as dodona_test:
+                            dodona_test.accepted = accepted
+                            dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
 
         status = ErrorType.CORRECT if failed_tests == 0 else ErrorType.WRONG
         judge.status = config.translator.error_status(status, amount=failed_tests)
