@@ -30,7 +30,7 @@ def determine_compile_command(assembly_language: AssemblyLanguage):
 
 
 def write_main_file(judge_path: str, workdir_path: str, tested_function: str, test_iterations: int, plan: SimpleNamespace):
-    with open(path.join(judge_path, "main.c.mako"), "r") as template_file:
+    with open(path.join(judge_path, "templates/main.c.mako"), "r") as template_file:
         template = Template(template_file.read())
 
     with open(path.join(workdir_path, "main.c"), "w") as main_file:
