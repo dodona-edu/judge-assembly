@@ -20,7 +20,7 @@ def invalid_suites(judge: SimpleNamespace, config: DodonaConfig):
 
 def compile_error(judge: SimpleNamespace, config: DodonaConfig, compile_error_message: str, line_shift: int):
     """Show the students a message saying that the compilation failed"""
-    for error_message in validation_error.msg.split('\n'):
+    for error_message in compile_error_message.split('\n'):
         matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
         if matches:
             with Message(description=matches.group(2), format=MessageFormat.CODE):
