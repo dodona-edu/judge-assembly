@@ -58,10 +58,11 @@ def main():
             test_program_path = run_compilation(config.translator, submission_file, config.judge, config.workdir, plan, config)
         except ValidationError as validation_error:
             for error_message in validation_error.msg.split('\n'):
-                with Message(description=error_message, format=MessageFormat.CODE):
-                    matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
-                    with Annotation(row=int(matches.group(1)), text=matches.group(2), type="error"):
-                        pass
+                matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
+                if matches:
+                    with Message(description=error_message, format=MessageFormat.CODE):
+                        with Annotation(row=int(matches.group(1)), text=matches.group(2), type="error"):
+                            pass
             compile_error(judge, config, validation_error.msg)
             return
 
