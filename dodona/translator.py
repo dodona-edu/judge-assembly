@@ -30,6 +30,8 @@ class Translator:
         INVALID_LANGUAGE_TRANSLATION = auto()
         INVALID_TESTSUITE_STUDENTS = auto()
         EVALUATION_FAILED = auto()
+        # descriptions
+        RETURN_VALUE = auto()
         # double char exceptions
         MISSING_OPENING_CHARACTER = auto()
         MISSING_CLOSING_CHARACTER = auto()
@@ -148,6 +150,8 @@ class Translator:
             Text.INVALID_LANGUAGE_TRANSLATION: "Translation for language {language} has less items than the checklist ({translation} instead of {checklist}). Some items will use the default value.",
             Text.INVALID_TESTSUITE_STUDENTS: "Your submission could not be evaluated because of an error in the solution file.",
             Text.EVALUATION_FAILED: "This check could not be executed successfully. Make sure that the HTML in your submission is valid.",
+            # descriptions
+            Text.RETURN_VALUE: "Return value",
             # double char exceptions
             Text.MISSING_OPENING_CHARACTER: "Missing opening character for",
             Text.MISSING_CLOSING_CHARACTER: "Missing closing character for",
@@ -196,6 +200,8 @@ class Translator:
             Text.INVALID_LANGUAGE_TRANSLATION: "De vertaling voor {language} bevat minder elementen dan de checklist ({translation} in plaats van {checklist}). De default waarde zal worden gebruikt voor sommige items.",
             Text.INVALID_TESTSUITE_STUDENTS: "Jouw indiening kon niet geëvalueerd worden door een fout in het oplossingsbestand.",
             Text.EVALUATION_FAILED: "Deze test kon niet uitgevoerd worden. Controleer dat de HTML in de indiening geldig is.",
+            # descriptions
+            Text.RETURN_VALUE: "Terugkeerwaarde",
             # double char exceptions
             Text.MISSING_OPENING_CHARACTER: "Ontbrekend openend karakter voor",
             Text.MISSING_CLOSING_CHARACTER: "Ontbrekend sluitend karakter voor",

@@ -62,7 +62,6 @@ def main():
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
                 test_name = f"{config.options.tested_function}({', '.join(map(str, test.arguments))})"
-                # TODO: accepted bij beiden?
                 with Context() as test_context, TestCase(test_name, format="code") as test_case:
                     expected = str(test.expected_return_value)
                     accepted = False
@@ -78,8 +77,11 @@ def main():
                     if not accepted:
                         failed_tests += 1
 
-                    # TODO: i18n?
-                    with Test(description="Return value", generated=test_result.generated, expected=expected) as dodona_test:
+                    with Test(
+                        description=config.translator.translate(Translator.Text.RETURN_VALUE),
+                        generated=test_result.generated,
+                        expected=expected
+                    ) as dodona_test:
                         dodona_test.accepted = accepted
                         dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
 
