@@ -71,13 +71,27 @@ def main():
                     try:
                         test_result = run_test(config.translator, test_program_path, test_id, config)
                         accepted = test_result.generated == expected
+
+                        # Return value test
                         with Test(
                             description=config.translator.translate(Translator.Text.RETURN_VALUE),
-                            expected=expected
+                            expected=expected,
                         ) as dodona_test:
                             dodona_test.generated = test_result.generated
                             dodona_test.accepted = accepted
                             dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
+
+                        # Time measurement test
+                        if test_result.performance:
+                            accepted = False # TODO
+                            with Test(
+                                description="foo",
+                                expected="bar",
+                            ) as dodona_test:
+                                # TODO: factor out with above code?
+                                dodona_test.generated = "bar2"
+                                dodona_test.accepted = accepted
+                                dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
                     except TestRuntimeError as e:
                         with Message(str(e)):
                             pass
