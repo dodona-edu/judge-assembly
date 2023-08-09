@@ -1,3 +1,4 @@
+from typing import Optional
 from types import SimpleNamespace
 from dodona.dodona_config import DodonaConfig
 from dodona.translator import Translator
@@ -8,12 +9,19 @@ import subprocess
 
 
 @dataclass
+class TestPerformance:
+    instruction_count: int
+    data_read_count: int
+    data_write_count: int
+
+
+@dataclass
 class TestResult:
     generated: str
+    performance: Optional[TestPerformance]
 
 
-# TODO: I guess we should cleanup the arguments as we're passing the config anyway (idem for compilation)
-def run_test(translator: Translator, workdir_path: str, test_program_path: str, test_id: int, config: DodonaConfig):
+def run_test(translator: Translator, test_program_path: str, test_id: int, config: DodonaConfig):
     # TODO: option to toggle on/off the time measurements?
     # TODO: option to choose your desired cycles for memory vs non-memory?
 
@@ -26,7 +34,7 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
     # TODO: depends on arch
     run_result = subprocess.run(
         command,
-        cwd=workdir_path,
+        cwd=config.workdir,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
@@ -35,22 +43,21 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
     if run_result.returncode != 0:
         raise TestRuntimeError(translator, 0, -1)
 
+    performance = None
     if config.measure_performance:
         target = f"fn={config.tested_function}\n"
-        instruction_count = 0
-        data_read_count = 0
-        data_write_count = 0
         # Find time measurement line for our tested function
-        with open(path.join(workdir_path, "timing.out")) as cachegrind_out_file:
+        with open(path.join(config.workdir, "timing.out")) as cachegrind_out_file:
             for line in cachegrind_out_file:
                 if line == target:
                     line = cachegrind_out_file.readline()
                     # Format: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw 
                     parts = line.split(' ')
-                    instruction_count = int(parts[1])
-                    data_read_count = int(parts[4])
-                    data_write_count = int(parts[7])
+                    performance = TestPerformance(
+                        instruction_count=int(parts[1]),
+                        data_read_count=int(parts[4]),
+                        data_write_count=int(parts[7])
+                    )
                     break
-        #print(instruction_count, data_read_count, data_write_count)
 
-    return TestResult(generated=run_result.stdout)
+    return TestResult(generated=run_result.stdout, performance=performance)

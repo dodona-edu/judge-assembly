@@ -69,7 +69,7 @@ def main():
                     expected = str(test.expected_return_value)
                     accepted = False
                     try:
-                        test_result = run_test(config.translator, config.workdir, test_program_path, test_id, config)
+                        test_result = run_test(config.translator, test_program_path, test_id, config)
                         accepted = test_result.generated == expected
                         with Test(
                             description=config.translator.translate(Translator.Text.RETURN_VALUE),
