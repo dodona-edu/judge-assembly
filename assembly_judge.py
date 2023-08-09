@@ -42,7 +42,7 @@ def main():
         submission_content = text_loader(config.source)
         # TODO: size will be wrong if there are multiple functions?
         # TODO: fn=... doesn't work with multiple functions?
-        submission_content = f".globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}"
+        submission_content = f".globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
