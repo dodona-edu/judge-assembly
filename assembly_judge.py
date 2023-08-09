@@ -40,6 +40,8 @@ def main():
 
         # Prepend the global annotation for the submission entry point
         submission_content = text_loader(config.source)
+        # TODO: size will be wrong if there are multiple functions?
+        # TODO: fn=... doesn't work with multiple functions?
         submission_content = f".globl {config.options.tested_function}\n.type {config.options.tested_function}, @function\n{submission_content}\n.size {config.options.tested_function}, .-{config.options.tested_function}"
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
