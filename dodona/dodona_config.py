@@ -71,7 +71,7 @@ class DodonaConfig(SimpleNamespace):
         self.resources = str(self.resources)
         self.source = str(self.source)
         self.workdir = str(self.workdir)
-        print(self, file=sys.stderr)
+        raise Exception(str(self))
         self.plan_name = str(self.plan_name)
         self.options = JudgeSpecificConfigOptions(
             assembly = self.options.assembly,
