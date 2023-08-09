@@ -81,9 +81,9 @@ def main():
                     else:
                         with Test(
                             description=config.translator.translate(Translator.Text.RETURN_VALUE),
-                            generated=test_result.generated,
                             expected=expected
                         ) as dodona_test:
+                            dodona_test.generated = test_result.generated
                             dodona_test.accepted = accepted
                             dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
 
