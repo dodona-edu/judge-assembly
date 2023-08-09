@@ -35,7 +35,7 @@ def run_test(translator: Translator, workdir_path: str, test_program_path: str, 
     )
 
     if run_result.returncode != 0:
-        raise TestRuntimeError(translator, 0, 0)
+        raise TestRuntimeError(translator, 0, -1)
 
     if measure_performance:
         target = f"fn={config.tested_function}\n"

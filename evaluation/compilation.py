@@ -56,7 +56,7 @@ def run_compilation(translator: Translator, source_file_name: str, judge_path: s
     )
 
     if compile_result.returncode != 0:
-        # TODO: more specific exception
-        raise ValidationError(translator, compile_result.stderr, 0, 0)
+        # TODO: more specific exception?
+        raise ValidationError(translator, compile_result.stderr, 0, -1)
 
     return path.join(workdir_path, "program")
