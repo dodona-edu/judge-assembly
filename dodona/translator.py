@@ -32,6 +32,7 @@ class Translator:
         EVALUATION_FAILED = auto()
         # descriptions
         RETURN_VALUE = auto()
+        MEASURED_CYCLES = auto()
         # double char exceptions
         MISSING_OPENING_CHARACTER = auto()
         MISSING_CLOSING_CHARACTER = auto()
@@ -152,6 +153,7 @@ class Translator:
             Text.EVALUATION_FAILED: "This check could not be executed successfully. Make sure that the HTML in your submission is valid.",
             # descriptions
             Text.RETURN_VALUE: "Return value",
+            Text.MEASURED_CYCLES: "Number of clock cycles to execute your code",
             # double char exceptions
             Text.MISSING_OPENING_CHARACTER: "Missing opening character for",
             Text.MISSING_CLOSING_CHARACTER: "Missing closing character for",
@@ -202,6 +204,7 @@ class Translator:
             Text.EVALUATION_FAILED: "Deze test kon niet uitgevoerd worden. Controleer dat de HTML in de indiening geldig is.",
             # descriptions
             Text.RETURN_VALUE: "Terugkeerwaarde",
+            Text.MEASURED_CYCLES: "Aantal klokcycli om je code uit te voeren",
             # double char exceptions
             Text.MISSING_OPENING_CHARACTER: "Ontbrekend openend karakter voor",
             Text.MISSING_CLOSING_CHARACTER: "Ontbrekend sluitend karakter voor",

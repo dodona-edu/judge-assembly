@@ -83,13 +83,17 @@ def main():
 
                         # Time measurement test
                         if test_result.performance:
-                            accepted = False # TODO
+                            # Combine the performance counters into a total number of cycles
+                            simulated_total_cycles = config.performance_cycle_factor_instructions * test_result.performance.instruction_count \
+                                                     + config.performance_cycle_factor_data_reads * test_result.performance.data_read_count \
+                                                     + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
+                            accepted = simulated_total_cycles <= test.max_cycles
                             with Test(
-                                description="foo",
-                                expected="bar",
+                                description=config.translator.translate(Translator.Text.MEASURED_CYCLES),
+                                expected=str(test.max_cycles),
                             ) as dodona_test:
-                                # TODO: factor out with above code?
-                                dodona_test.generated = "bar2"
+                                # TODO: somehow factor out with above code?
+                                dodona_test.generated = str(simulated_total_cycles)
                                 dodona_test.accepted = accepted
                                 dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
                     except TestRuntimeError as e:
