@@ -44,6 +44,7 @@ def main():
         # TODO: size will be wrong if there are multiple functions?
         # TODO: fn=... doesn't work with multiple functions?
         submission_content = f".globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
+        line_shift = 3
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
@@ -60,10 +61,12 @@ def main():
             for error_message in validation_error.msg.split('\n'):
                 matches = re.search(r"submission.s:(\d+): (.*)$", error_message)
                 if matches:
-                    with Message(description=error_message, format=MessageFormat.CODE):
-                        with Annotation(row=int(matches.group(1)), text=matches.group(2), type="error"):
+                    with Message(description=matches.group(2), format=MessageFormat.CODE):
+                        with Annotation(row=int(matches.group(1)) - line_shift, text=matches.group(2), type="error"):
                             pass
-            compile_error(judge, config, validation_error.msg)
+            #compile_error(judge, config, validation_error.msg)
+            judge.status = config.translator.error_status(ErrorType.COMPILATION_ERROR)
+            judge.accepted = False
             return
 
         # Run the tests
