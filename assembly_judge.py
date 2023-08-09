@@ -18,7 +18,6 @@ from utils.messages import invalid_suites, invalid_evaluator_file, missing_creat
 from evaluation.compilation import run_compilation
 from evaluation.run import run_test
 import json
-import re
 
 
 def main():

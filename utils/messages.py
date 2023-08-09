@@ -4,6 +4,7 @@ from dodona.dodona_command import Message, MessageFormat, ErrorType, MessagePerm
 from dodona.dodona_config import DodonaConfig
 from dodona.translator import Translator
 import traceback
+import re
 
 
 def invalid_suites(judge: SimpleNamespace, config: DodonaConfig):
