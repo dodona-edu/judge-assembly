@@ -5,13 +5,12 @@ from mako.template import Template
 from types import SimpleNamespace
 from os import path
 import subprocess
-import json
 
 # TODO: documentation
 
 
 def determine_compile_command(assembly_language: AssemblyLanguage):
-    compile_options = ["-std=c11", "-g", "-O1"]
+    compile_options = ["-std=c11", "-O1"]
     match assembly_language:
         case AssemblyLanguage.X86_32_ATT:
             compile_command = "gcc"
@@ -42,11 +41,7 @@ def write_main_file(workdir_path: str, tested_function: str, test_iterations: in
         ))
 
 
-def run_compilation(translator: Translator, source_file_name: str, workdir_path: str, plan_file_name: str, options: JudgeSpecificConfigOptions):
-    # TODO: validate arg types?
-    with open(plan_file_name, "r") as plan_file:
-        plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
-
+def run_compilation(translator: Translator, source_file_name: str, workdir_path: str, plan: SimpleNamespace, options: JudgeSpecificConfigOptions) -> str:
     write_main_file(workdir_path, options.tested_function, options.test_iterations, plan)
 
     compile_command, compile_options = determine_compile_command(options.assembly)
@@ -63,3 +58,5 @@ def run_compilation(translator: Translator, source_file_name: str, workdir_path:
     if compile_result.returncode != 0:
         # TODO: more specific exception
         raise ValidationError(translator, compile_result.stderr, 0, 0)
+
+    return path.join(workdir_path, "program")

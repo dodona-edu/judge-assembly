@@ -9,14 +9,14 @@
 	"access": "private",
 	"natural_language": "en",
 	"resources": "sample-exercise/",
-	"source": "/run/media/niels/MoreData/assembly-toolbox/judge-assembly/sample-exercise/solution/originalx86-32.s",
-	"plan_name": "/run/media/niels/MoreData/assembly-toolbox/judge-assembly/sample-exercise/evaluation/plan.json",
-	"workdir": "/run/media/niels/MoreData/assembly-toolbox/judge-assembly/workdir/",
+	"source": "/home/niels/VOP/assembly-judge/sample-exercise/solution/originalx86-32.s",
+	"plan_name": "/home/niels/VOP/assembly-judge/sample-exercise/evaluation/plan.json",
+	"workdir": "/home/niels/VOP/assembly-judge/workdir/",
 	"memory_limit": 10000000,
 	"time_limit": 30,
 	"options": {
 		"assembly": "x86-32-at&t",
 		"tested_function": "narayana",
-		"test_iterations": 1000
+		"test_iterations": 10000
 	}
 }

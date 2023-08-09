@@ -145,3 +145,4 @@ cython_debug/
 workdir/main.c
 workdir/program
 workdir/submission.s
+workdir/*.out

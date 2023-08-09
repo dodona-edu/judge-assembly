@@ -1,20 +1,23 @@
 import os
 import sys
 from typing import List, Optional
+from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, MessageFormat
+from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, MessageFormat
 from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from exceptions.utils import InvalidTranslation
 from utils.evaluation_module import EvaluationModule
 from utils.file_loaders import html_loader, text_loader
 from exceptions.evaluation_exceptions import ValidationError
+from exceptions.evaluation_exceptions import TestRuntimeError
 from validators import checks
 from validators.checks import TestSuite
 from utils.render_ready import prep_render
 from utils.messages import invalid_suites, invalid_evaluator_file, missing_create_suite, missing_evaluator_file, no_suites_found, compile_error
 from evaluation.compilation import run_compilation
-from os import path
+from evaluation.run import run_test
+import json
 
 
 def main():
@@ -37,23 +40,53 @@ def main():
 
         # Prepend the global annotation for the submission entry point
         submission_content = text_loader(config.source)
-        submission_content = ".globl " + config.options.tested_function + "\n" + submission_content
-        submission_file = path.join(config.workdir, "submission.s")
+        submission_content = f".globl {config.options.tested_function}\n.type {config.options.tested_function}, @function\n{submission_content}\n.size {config.options.tested_function}, .-{config.options.tested_function}"
+        submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
 
+        # Load test plan
+        # TODO: validate arg types?
+        with open(config.plan_name, "r") as plan_file:
+            plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
+
         # Compile code
         try:
-            run_compilation(config.translator, submission_file, config.workdir, config.plan_name, config.options)
+            test_program_path = run_compilation(config.translator, submission_file, config.workdir, plan, config.options)
         except ValidationError as validation_error:
             compile_error(judge, config, validation_error.msg)
             return
 
         # Run the tests
-        with Tab('Tests'):
-            pass
+        with Tab('Feedback'):
+            # Put each testcase in a separate context
+            for test_id, test in enumerate(plan.tests):
+                test_name = f"{config.options.tested_function}({', '.join(map(str, test.arguments))})"
+                # TODO: accepted bij beiden?
+                with Context() as test_context, TestCase(test_name, format="code") as test_case:
+                    expected = str(test.expected_return_value)
+                    accepted = False
+                    try:
+                        test_result = run_test(config.translator, config.workdir, test_program_path, test_id, test, config.options)
+                        accepted = test_result.generated == expected
+                    except TestRuntimeError as e:
+                        # TODO
+                        print(e)
 
-        assert False
+                    test_context.accepted = accepted
+                    test_case.accepted = accepted
+                    if not accepted:
+                        failed_tests += 1
+
+                    # TODO: i18n?
+                    with Test(description="Return value", generated=test_result.generated, expected=expected) as dodona_test:
+                        dodona_test.accepted = accepted
+                        dodona_test.status = {"enum": ErrorType.CORRECT if accepted else ErrorType.WRONG}
+
+        status = ErrorType.CORRECT if failed_tests == 0 else ErrorType.WRONG
+        judge.status = config.translator.error_status(status, amount=failed_tests)
+
+        return
 
         # Compile evaluator code & create test suites
         # If anything goes wrong, show a detailed error message to the teacher
