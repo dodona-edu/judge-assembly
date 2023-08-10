@@ -3,7 +3,7 @@ import sys
 from types import SimpleNamespace
 
 from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test
-from dodona.dodona_config import DodonaConfig
+from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from utils.file_loaders import text_loader
 from exceptions.evaluation_exceptions import ValidationError, TestRuntimeError
@@ -35,8 +35,14 @@ def main():
         submission_content = text_loader(config.source)
         # TODO: size will be wrong if there are multiple functions?
         # TODO: fn=... doesn't work with multiple functions?
-        submission_content = f".globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
         line_shift = 3
+        prefix = ""
+
+        if config.assembly == AssemblyLanguage.X86_32_INTEL or AssemblyLanguage.X86_64_INTEL:
+            line_shift += 1
+            prefix = ".intel_syntax noprefix\n"
+
+        submission_content = f"{prefix}.globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
