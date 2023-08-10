@@ -33,7 +33,7 @@ def main():
 
         # Prepend the global annotation for the submission entry point
         submission_content = text_loader(config.source)
-        # TODO: .size directive will be wrong if there are multiple functions?
+        # TODO: .size directive will be wrong if there are multiple functions? (of wacht, mss klopt het wel...)
         # TODO: fn=... doesn't work with multiple functions?
         line_shift = 3
         prefix = ""
@@ -42,12 +42,15 @@ def main():
             line_shift += 1
             prefix = ".intel_syntax noprefix\n"
 
-        if config.assembly == AssemblyLanguage.ARM_32:
+        # TODO: moet dit?
+        if config.assembly == AssemblyLanguage.ARM_32 or config.assembly == AssemblyLanguage.ARM_64:
             global_directive = "global"
+            function_type = "%function"
         else:
             global_directive = "globl"
+            function_type = "@function"
 
-        submission_content = f"{prefix}.{global_directive} {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
+        submission_content = f"{prefix}.{global_directive} {config.tested_function}\n.type {config.tested_function}, {function_type}\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
