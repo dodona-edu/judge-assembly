@@ -3,9 +3,8 @@
 import json
 import os
 from types import SimpleNamespace
-from typing import Any, TextIO
+from typing import TextIO
 from enum import Enum
-import sys
 
 
 class AssemblyLanguage(Enum):

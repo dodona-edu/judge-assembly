@@ -1,20 +1,13 @@
 import os
 import sys
-from typing import List, Optional
 from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, MessageFormat
-from dodona.dodona_config import DodonaConfig, AssemblyLanguage
+from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test
+from dodona.dodona_config import DodonaConfig
 from dodona.translator import Translator
-from exceptions.utils import InvalidTranslation
-from utils.evaluation_module import EvaluationModule
-from utils.file_loaders import html_loader, text_loader
-from exceptions.evaluation_exceptions import ValidationError
-from exceptions.evaluation_exceptions import TestRuntimeError
-from validators import checks
-from validators.checks import TestSuite
-from utils.render_ready import prep_render
-from utils.messages import invalid_suites, invalid_evaluator_file, missing_create_suite, missing_evaluator_file, no_suites_found, compile_error
+from utils.file_loaders import text_loader
+from exceptions.evaluation_exceptions import ValidationError, TestRuntimeError
+from utils.messages import compile_error
 from evaluation.compilation import run_compilation
 from evaluation.run import run_test
 import json
@@ -55,7 +48,7 @@ def main():
 
         # Compile code
         try:
-            test_program_path = run_compilation(config.translator, submission_file, config.judge, config.workdir, plan, config)
+            test_program_path = run_compilation(config, plan)
         except ValidationError as validation_error:
             compile_error(judge, config, validation_error.msg, line_shift)
             return
@@ -74,8 +67,8 @@ def main():
 
                         # Return value test
                         with Test(
-                            description=config.translator.translate(Translator.Text.RETURN_VALUE),
-                            expected=expected,
+                                description=config.translator.translate(Translator.Text.RETURN_VALUE),
+                                expected=expected,
                         ) as dodona_test:
                             dodona_test.generated = test_result.generated
                             dodona_test.accepted = accepted
@@ -89,8 +82,8 @@ def main():
                                                      + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
                             accepted = simulated_total_cycles <= test.max_cycles
                             with Test(
-                                description=config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                expected="<= " + str(test.max_cycles),
+                                    description=config.translator.translate(Translator.Text.MEASURED_CYCLES),
+                                    expected="<= " + str(test.max_cycles),
                             ) as dodona_test:
                                 # TODO: somehow factor out with above code?
                                 dodona_test.generated = str(simulated_total_cycles)

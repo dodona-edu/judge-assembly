@@ -1,10 +1,10 @@
 from dodona.dodona_config import AssemblyLanguage, DodonaConfig
 from exceptions.evaluation_exceptions import ValidationError
-from dodona.translator import Translator
 from mako.template import Template
 from types import SimpleNamespace
 from os import path
 import subprocess
+
 
 # TODO: documentation
 
@@ -29,34 +29,34 @@ def determine_compile_command(assembly_language: AssemblyLanguage):
     return compile_command, compile_options
 
 
-def write_main_file(judge_path: str, workdir_path: str, tested_function: str, test_iterations: int, plan: SimpleNamespace):
+def write_main_file(judge_path: str, workdir_path: str, tested_function: str, test_iterations: int,
+                    plan: SimpleNamespace):
     with open(path.join(judge_path, "templates/main.c.mako"), "r") as template_file:
         template = Template(template_file.read())
 
     with open(path.join(workdir_path, "main.c"), "w") as main_file:
         main_file.write(template.render(
-            tested_function = tested_function,
-            test_iterations = test_iterations,
-            plan = plan
+            tested_function=tested_function,
+            test_iterations=test_iterations,
+            plan=plan
         ))
 
 
-def run_compilation(translator: Translator, source_file_name: str, judge_path: str, workdir_path: str, plan: SimpleNamespace, config: DodonaConfig) -> str:
-    write_main_file(judge_path, workdir_path, config.tested_function, config.test_iterations, plan)
+def run_compilation(config: DodonaConfig, plan: SimpleNamespace) -> str:
+    write_main_file(config.judge, config.workdir, config.tested_function, config.test_iterations, plan)
 
     compile_command, compile_options = determine_compile_command(config.assembly)
-    compile_options += [path.join(workdir_path, "main.c"), "-o", "program", source_file_name]
+    compile_options += [path.join(config.workdir, "main.c"), "-o", "program", config.source]
 
     compile_result = subprocess.run(
         [compile_command] + compile_options,
-        cwd=workdir_path,
+        cwd=config.workdir,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
     )
 
     if compile_result.returncode != 0:
-        # TODO: more specific exception?
-        raise ValidationError(translator, compile_result.stderr, 0, -1)
+        raise ValidationError(config.translator, compile_result.stderr, 0, -1)
 
-    return path.join(workdir_path, "program")
+    return path.join(config.workdir, "program")

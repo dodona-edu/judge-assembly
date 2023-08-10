@@ -33,24 +33,6 @@ class Translator:
         # descriptions
         RETURN_VALUE = auto()
         MEASURED_CYCLES = auto()
-        # double char exceptions
-        MISSING_OPENING_CHARACTER = auto()
-        MISSING_CLOSING_CHARACTER = auto()
-        # html exceptions
-        MISSING_OPENING_TAG = auto()
-        MISSING_CLOSING_TAG = auto()
-        INVALID_TAG = auto()
-        NO_SELF_CLOSING_TAG = auto()
-        UNEXPECTED_TAG = auto()
-        UNEXPECTED_CLOSING_TAG = auto()
-        INVALID_ATTRIBUTE = auto()
-        MISSING_REQUIRED_ATTRIBUTE = auto()
-        DUPLICATE_ID = auto()
-        AT_LEAST_ONE_CHAR = auto()
-        NO_WHITESPACE = auto()
-        NO_ABS_PATHS = auto()
-        MISSING_RECOMMENDED_ATTRIBUTE = auto()
-        AMBIGUOUS_XPATH = auto()
         # comparer text
         EMPTY_SUBMISSION = auto()
         TAGS_DIFFER = auto()
@@ -154,24 +136,6 @@ class Translator:
             # descriptions
             Text.RETURN_VALUE: "Return value",
             Text.MEASURED_CYCLES: "Number of clock cycles to execute your code",
-            # double char exceptions
-            Text.MISSING_OPENING_CHARACTER: "Missing opening character for",
-            Text.MISSING_CLOSING_CHARACTER: "Missing closing character for",
-            # html exceptions
-            Text.MISSING_OPENING_TAG: "Missing opening HTML tag for",
-            Text.MISSING_CLOSING_TAG: "Missing closing HTML tag for",
-            Text.INVALID_TAG: "Invalid HTML tag",
-            Text.NO_SELF_CLOSING_TAG: "The following tag is not a self-closing HTML tag",
-            Text.UNEXPECTED_TAG: "Unexpected HTML tag",
-            Text.UNEXPECTED_CLOSING_TAG: "The tag <{tag}> isn't supposed to have a closing tag, it's self-closing.",
-            Text.INVALID_ATTRIBUTE: "Invalid attribute for",
-            Text.MISSING_REQUIRED_ATTRIBUTE: "Missing required attribute(s) for",
-            Text.DUPLICATE_ID: "Id '{id}' defined in tag <{tag}> is already defined",
-            Text.AT_LEAST_ONE_CHAR: "The value of {attr} must be at least one character.",
-            Text.NO_WHITESPACE: "The value of {attr} may not contain whitespace.",
-            Text.NO_ABS_PATHS: "The src attribute may not contain an absolute path.",
-            Text.MISSING_RECOMMENDED_ATTRIBUTE: "Missing recommended attribute(s) for",
-            Text.AMBIGUOUS_XPATH: "We were unable to unambiguously locate this element. Make sure the submission is wrapped in a single root element.",
             # comparer text
             Text.EMPTY_SUBMISSION: "The submission is empty.",
             Text.TAGS_DIFFER: "Tags differ",
@@ -205,24 +169,6 @@ class Translator:
             # descriptions
             Text.RETURN_VALUE: "Terugkeerwaarde",
             Text.MEASURED_CYCLES: "Aantal klokcycli om je code uit te voeren",
-            # double char exceptions
-            Text.MISSING_OPENING_CHARACTER: "Ontbrekend openend karakter voor",
-            Text.MISSING_CLOSING_CHARACTER: "Ontbrekend sluitend karakter voor",
-            # html exceptions
-            Text.MISSING_OPENING_TAG: "Ontbrekende openende HTML-tag voor",
-            Text.MISSING_CLOSING_TAG: "Ontbrekende sluitende HTML-tag voor",
-            Text.INVALID_TAG: "Ongeldige HTML-tag",
-            Text.NO_SELF_CLOSING_TAG: "De volgende HTML-tag is geen zelf-afsluitende HTML-tag",
-            Text.UNEXPECTED_TAG: "Onverwachte HTML-tag",
-            Text.UNEXPECTED_CLOSING_TAG: "De tag <{tag}> hoort geen sluitende tag te hebben, het is een zichzelf-afsluitende tag.",
-            Text.INVALID_ATTRIBUTE: "Ongeldig attribuut voor",
-            Text.MISSING_REQUIRED_ATTRIBUTE: "Ontbrekende vereiste attributen voor",
-            Text.DUPLICATE_ID: "Id '{id}' gedefinieerd in tag <{tag}> is al gedefinieerd",
-            Text.AT_LEAST_ONE_CHAR: "De waarde van {attr} moet minimaal 1 karakter lang zijn.",
-            Text.NO_WHITESPACE: "De waarde van {attr} mag geen spaties bevatten.",
-            Text.NO_ABS_PATHS: "Het attribuut src mag geen absoluut pad zijn.",
-            Text.MISSING_RECOMMENDED_ATTRIBUTE: "Ontbrekende aanbevolen attributen voor",
-            Text.AMBIGUOUS_XPATH: "Dit HTML-element kon niet ondubbelzinnig gevonden worden. Zorg dat er slechts één enkele omsluitende tag op het hoogste niveau van de indiening is.",
             # comparer text
             Text.EMPTY_SUBMISSION: "De indiening was leeg.",
             Text.TAGS_DIFFER: "Tags verschillen",

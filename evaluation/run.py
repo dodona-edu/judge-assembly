@@ -1,5 +1,4 @@
 from typing import Optional
-from types import SimpleNamespace
 from dodona.dodona_config import DodonaConfig
 from dodona.translator import Translator
 from exceptions.evaluation_exceptions import TestRuntimeError
@@ -22,14 +21,16 @@ class TestResult:
 
 
 def run_test(translator: Translator, test_program_path: str, test_id: int, config: DodonaConfig):
-    # TODO: option to toggle on/off the time measurements?
-    # TODO: option to choose your desired cycles for memory vs non-memory?
-
     command = [test_program_path, str(test_id)]
 
     if config.measure_performance:
         # TODO: depends on arch
-        command = ["valgrind", "--tool=cachegrind", "--cache-sim=yes", "--log-file=/dev/null", "--cachegrind-out-file=timing.out", "--quiet"] + command
+        command = ["valgrind",
+                   "--tool=cachegrind",
+                   "--cache-sim=yes",
+                   "--log-file=/dev/null",
+                   "--cachegrind-out-file=timing.out",
+                   "--quiet"] + command
 
     # TODO: depends on arch
     run_result = subprocess.run(
