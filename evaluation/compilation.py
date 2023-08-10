@@ -48,7 +48,6 @@ def run_compilation(config: DodonaConfig, plan: SimpleNamespace, submission_file
 
     compile_command, compile_options = determine_compile_command(config.assembly)
     compile_options += [submission_file_path, path.join(config.workdir, "main.c"), "-o", "program"]
-    print(compile_command, compile_options)
 
     compile_result = subprocess.run(
         [compile_command] + compile_options,
