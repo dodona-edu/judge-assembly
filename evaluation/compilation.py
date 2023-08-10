@@ -20,12 +20,11 @@ def determine_compile_command(assembly_language: AssemblyLanguage):
             compile_options.append("-m32")
         case AssemblyLanguage.X86_32_INTEL:
             compile_command = "gcc"
-            compile_options.extend(("-m32", "-masm=intel"))
+            compile_options.append("-m32")
         case AssemblyLanguage.X86_64_ATT:
             compile_command = "gcc"
         case AssemblyLanguage.X86_64_INTEL:
             compile_command = "gcc"
-            compile_options.append("-masm=intel")
         # TODO: ARM
         case _:
             raise NotImplementedError(f"Assembly language {assembly_language} is not implemented")
