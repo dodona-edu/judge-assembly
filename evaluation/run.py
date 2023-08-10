@@ -1,5 +1,5 @@
 from typing import Optional
-from dodona.dodona_config import DodonaConfig
+from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from exceptions.evaluation_exceptions import TestRuntimeError
 from dataclasses import dataclass
@@ -20,19 +20,40 @@ class TestResult:
     performance: Optional[TestPerformance]
 
 
+def determine_emulator(assembly_language: AssemblyLanguage):
+    match assembly_language:
+        case AssemblyLanguage.ARM_32:
+            return "qemu-arm"
+        case AssemblyLanguage.ARM_64:
+            return "qemu-aarch64"
+
+
+def determine_valgrind(assembly_language: AssemblyLanguage):
+    match assembly_language:
+        case AssemblyLanguage.ARM_32:
+            return "/opt/valgrind-arm32/bin/valgrind"
+        case AssemblyLanguage.ARM_64:
+            return "/opt/valgrind-aarch64/bin/valgrind"
+        case _:
+            return "valgrind"
+
+
 def run_test(translator: Translator, test_program_path: str, test_id: int, config: DodonaConfig):
     command = [test_program_path, str(test_id)]
 
+    # May need an emulator depending on the architecture
+    emulator = determine_emulator(config.assembly)
+    if emulator:
+        command = [emulator, *command]
+
     if config.measure_performance:
-        # TODO: depends on arch
-        command = ["valgrind",
+        command = [determine_valgrind(config.assembly),
                    "--tool=cachegrind",
                    "--cache-sim=yes",
                    "--log-file=/dev/null",
                    "--cachegrind-out-file=timing.out",
                    "--quiet"] + command
 
-    # TODO: depends on arch
     run_result = subprocess.run(
         command,
         cwd=config.workdir,
