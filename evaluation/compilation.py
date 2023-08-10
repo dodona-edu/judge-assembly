@@ -5,6 +5,8 @@ from types import SimpleNamespace
 from os import path
 import subprocess
 
+from utils.file_loaders import text_loader
+
 
 # TODO: documentation
 
@@ -31,8 +33,7 @@ def determine_compile_command(assembly_language: AssemblyLanguage):
 
 def write_main_file(judge_path: str, workdir_path: str, tested_function: str, test_iterations: int,
                     plan: SimpleNamespace):
-    with open(path.join(judge_path, "templates/main.c.mako"), "r") as template_file:
-        template = Template(template_file.read())
+    template = Template(text_loader(path.join(judge_path, "templates/main.c.mako")))
 
     with open(path.join(workdir_path, "main.c"), "w") as main_file:
         main_file.write(template.render(
