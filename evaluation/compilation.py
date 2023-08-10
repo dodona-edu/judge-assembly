@@ -12,7 +12,7 @@ from utils.file_loaders import text_loader
 
 
 def determine_compile_command(assembly_language: AssemblyLanguage):
-    compile_options = ["-std=c11", "-O1", "-fno-pie", "-no-pie"]
+    compile_options = ["-std=c11", "-O1"]
     match assembly_language:
         case AssemblyLanguage.X86_32_ATT:
             compile_command = "gcc"
@@ -24,7 +24,12 @@ def determine_compile_command(assembly_language: AssemblyLanguage):
             compile_command = "gcc"
         case AssemblyLanguage.X86_64_INTEL:
             compile_command = "gcc"
-        # TODO: ARM
+        case AssemblyLanguage.ARM_32:
+            compile_command = "arm-linux-gnueabihf-gcc"
+            compile_options.append("-static")
+        case AssemblyLanguage.ARM_64:
+            compile_command = "aarch64-linux-gnu-gcc"
+            compile_options.append("-static")
         case _:
             raise NotImplementedError(f"Assembly language {assembly_language} is not implemented")
     return compile_command, compile_options
