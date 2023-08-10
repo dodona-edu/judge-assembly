@@ -31,23 +31,22 @@ def determine_compile_command(assembly_language: AssemblyLanguage):
     return compile_command, compile_options
 
 
-def write_main_file(judge_path: str, workdir_path: str, tested_function: str, test_iterations: int,
-                    plan: SimpleNamespace):
-    template = Template(text_loader(path.join(judge_path, "templates/main.c.mako")))
+def write_main_file(config: DodonaConfig, plan: SimpleNamespace):
+    template = Template(text_loader(path.join(config.judge, "templates/main.c.mako")))
 
-    with open(path.join(workdir_path, "main.c"), "w") as main_file:
+    with open(path.join(config.workdir, "main.c"), "w") as main_file:
         main_file.write(template.render(
-            tested_function=tested_function,
-            test_iterations=test_iterations,
+            tested_function=config.tested_function,
+            test_iterations=config.test_iterations,
             plan=plan
         ))
 
 
-def run_compilation(config: DodonaConfig, plan: SimpleNamespace) -> str:
-    write_main_file(config.judge, config.workdir, config.tested_function, config.test_iterations, plan)
+def run_compilation(config: DodonaConfig, plan: SimpleNamespace, submission_file_path: str) -> str:
+    write_main_file(config, plan)
 
     compile_command, compile_options = determine_compile_command(config.assembly)
-    compile_options += [path.join(config.workdir, "main.c"), "-o", "program", config.source]
+    compile_options += [path.join(config.workdir, "main.c"), "-o", "program", submission_file_path]
 
     compile_result = subprocess.run(
         [compile_command] + compile_options,

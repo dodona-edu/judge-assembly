@@ -48,7 +48,7 @@ def main():
 
         # Compile code
         try:
-            test_program_path = run_compilation(config, plan)
+            test_program_path = run_compilation(config, plan, submission_file)
         except ValidationError as validation_error:
             compile_error(judge, config, validation_error.msg, line_shift)
             return
@@ -58,7 +58,7 @@ def main():
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
                 test_name = f"{config.tested_function}({', '.join(map(str, test.arguments))})"
-                with Context() as test_context, TestCase(test_name, format="code") as test_case:
+                with Context() as test_context, TestCase(test_name, format="code") as test_case:#TODO: enum
                     expected = str(test.expected_return_value)
                     accepted = False
                     try:
