@@ -38,11 +38,11 @@ def main():
         line_shift = 3
         prefix = ""
 
+        # TODO: split off all of this
         if config.assembly == AssemblyLanguage.X86_32_INTEL or config.assembly == AssemblyLanguage.X86_64_INTEL:
             line_shift += 1
             prefix = ".intel_syntax noprefix\n"
 
-        # TODO: moet dit?
         if config.assembly == AssemblyLanguage.ARM_32 or config.assembly == AssemblyLanguage.ARM_64:
             global_directive = "global"
             function_type = "%function"
