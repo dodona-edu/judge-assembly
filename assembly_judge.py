@@ -38,7 +38,7 @@ def main():
         line_shift = 3
         prefix = ""
 
-        if config.assembly == AssemblyLanguage.X86_32_INTEL or AssemblyLanguage.X86_64_INTEL:
+        if config.assembly == AssemblyLanguage.X86_32_INTEL or config.assembly == AssemblyLanguage.X86_64_INTEL:
             line_shift += 1
             prefix = ".intel_syntax noprefix\n"
 
