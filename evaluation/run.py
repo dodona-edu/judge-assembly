@@ -41,18 +41,19 @@ def determine_valgrind(assembly_language: AssemblyLanguage):
 def run_test(translator: Translator, test_program_path: str, test_id: int, config: DodonaConfig):
     command = [test_program_path, str(test_id)]
 
-    # May need an emulator depending on the architecture
-    emulator = determine_emulator(config.assembly)
-    if emulator:
-        command = [emulator, *command]
-
     if config.measure_performance:
         command = [determine_valgrind(config.assembly),
                    "--tool=cachegrind",
                    "--cache-sim=yes",
                    "--log-file=/dev/null",
                    "--cachegrind-out-file=timing.out",
-                   "--quiet"] + command
+                   "--quiet",
+                   *command]
+
+    # May need an emulator depending on the architecture
+    emulator = determine_emulator(config.assembly)
+    if emulator:
+        command = [emulator, *command]
 
     run_result = subprocess.run(
         command,
