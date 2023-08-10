@@ -42,7 +42,12 @@ def main():
             line_shift += 1
             prefix = ".intel_syntax noprefix\n"
 
-        submission_content = f"{prefix}.globl {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
+        if config.assembly == AssemblyLanguage.ARM_32:
+            global_directive = "global"
+        else:
+            global_directive = "globl"
+
+        submission_content = f"{prefix}.{global_directive} {config.tested_function}\n.type {config.tested_function}, @function\n{submission_content}\n.size {config.tested_function}, .-{config.tested_function}\n"
         submission_file = os.path.join(config.workdir, "submission.s")
         with open(submission_file, "w") as modified_submission_file:
             modified_submission_file.write(submission_content)
