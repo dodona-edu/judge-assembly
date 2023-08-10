@@ -2,7 +2,7 @@ import os
 import sys
 from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test
+from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, Test, MessageFormat
 from dodona.dodona_config import DodonaConfig, AssemblyLanguage
 from dodona.translator import Translator
 from utils.file_loaders import text_loader
@@ -33,7 +33,7 @@ def main():
 
         # Prepend the global annotation for the submission entry point
         submission_content = text_loader(config.source)
-        # TODO: size will be wrong if there are multiple functions?
+        # TODO: .size directive will be wrong if there are multiple functions?
         # TODO: fn=... doesn't work with multiple functions?
         line_shift = 3
         prefix = ""
@@ -64,7 +64,7 @@ def main():
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
                 test_name = f"{config.tested_function}({', '.join(map(str, test.arguments))})"
-                with Context() as test_context, TestCase(test_name, format="code") as test_case:#TODO: enum
+                with Context() as test_context, TestCase(test_name, format=MessageFormat.CODE) as test_case:
                     expected = str(test.expected_return_value)
                     accepted = False
                     try:
@@ -89,7 +89,7 @@ def main():
                             accepted = simulated_total_cycles <= test.max_cycles
                             with Test(
                                     description=config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                    expected="<= " + str(test.max_cycles),
+                                    expected=f"<= {str(test.max_cycles)}",
                             ) as dodona_test:
                                 # TODO: somehow factor out with above code?
                                 dodona_test.generated = str(simulated_total_cycles)

@@ -13,6 +13,7 @@ from utils.file_loaders import text_loader
 
 def determine_compile_command(assembly_language: AssemblyLanguage):
     compile_options = ["-std=c11", "-O1", "-fno-pie", "-no-pie"]
+    # TODO: no masm argument?
     match assembly_language:
         case AssemblyLanguage.X86_32_ATT:
             compile_command = "gcc"
@@ -46,7 +47,8 @@ def run_compilation(config: DodonaConfig, plan: SimpleNamespace, submission_file
     write_main_file(config, plan)
 
     compile_command, compile_options = determine_compile_command(config.assembly)
-    compile_options += [path.join(config.workdir, "main.c"), "-o", "program", submission_file_path]
+    compile_options += [submission_file_path, path.join(config.workdir, "main.c"), "-o", "program"]
+    print(compile_command, compile_options)
 
     compile_result = subprocess.run(
         [compile_command] + compile_options,
