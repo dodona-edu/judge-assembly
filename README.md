@@ -56,6 +56,13 @@ See https://github.com/nielsdos/dodona-assembly-exercises/tree/main/exercises/na
 
 ## Acknowledgements
 
+This judge was based on the work of four students of Ghent University for the cross-course project (vakoverschrijdend project ingenieurswetenschappen computerwetenschappen, 2022-2023):
+
+* Gilles De Praetere
+* Wout De Saegher
+* Joris Pockelé
+* Stijn Verbeken
+
 Based on the HTML judge (https://github.com/dodona-edu/judge-html) made by:
 
 * **S. De Clercq**
