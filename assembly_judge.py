@@ -125,8 +125,8 @@ def main():
                             accepted = accepted and accepted_cycles
                             report_test(
                                 config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                f"<= {str(test.max_cycles)}",
-                                str(simulated_total_cycles),
+                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=f"<= {str(test.max_cycles)}"),
+                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)),
                                 accepted_cycles,
                             )
 
