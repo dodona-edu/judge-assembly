@@ -138,7 +138,7 @@ def main():
                                 report_test(
                                     config.translator.translate(Translator.Text.CALLING_CONVENTION_VIOLATION),
                                     "",
-                                    test_result.calling_convention_error,
+                                    config.translator.translate(Translator.Text.CALLING_CONVENTION_MSG, msg=test_result.calling_convention_error),
                                     accepted_calling_convention,
                                 )
                     except TestRuntimeError as e:

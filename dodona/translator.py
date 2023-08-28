@@ -28,6 +28,7 @@ class Translator:
         RETURN_VALUE = auto()
         MEASURED_CYCLES = auto()
         CALLING_CONVENTION_VIOLATION = auto()
+        CALLING_CONVENTION_MSG = auto()
         MISSING_TEST_FUNCTION = auto()
         # normal text
         ERRORS = auto()
@@ -116,6 +117,7 @@ class Translator:
             Text.RETURN_VALUE: "Return value",
             Text.MEASURED_CYCLES: "Number of clock cycles to execute your code",
             Text.CALLING_CONVENTION_VIOLATION: "Calling convention was violated",
+            Text.CALLING_CONVENTION_MSG: "{msg} was/were not preserved",
             Text.MISSING_TEST_FUNCTION: "The to-be-tested function is missing (typo?).",
             # normal text
             Text.ERRORS: "Error(s)",
@@ -134,6 +136,7 @@ class Translator:
             Text.RETURN_VALUE: "Terugkeerwaarde",
             Text.MEASURED_CYCLES: "Aantal klokcycli om je code uit te voeren",
             Text.CALLING_CONVENTION_VIOLATION: "Oproepconventie werd geschonden",
+            Text.CALLING_CONVENTION_MSG: "{msg} werd(en) niet behouden",
             Text.MISSING_TEST_FUNCTION: "De te testen functie werd niet gevonden (typo?).",
             # normal text
             Text.ERRORS: "Fout(en)",
