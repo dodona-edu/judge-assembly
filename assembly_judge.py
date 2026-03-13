@@ -121,11 +121,16 @@ def main():
                             simulated_total_cycles = config.performance_cycle_factor_instructions * test_result.performance.instruction_count \
                                                      + config.performance_cycle_factor_data_reads * test_result.performance.data_read_count \
                                                      + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
-                            accepted_cycles = simulated_total_cycles <= test.max_cycles
+                            if hasattr(test, 'max_cycles'):
+                                accepted_cycles = simulated_total_cycles <= test.max_cycles
+                                cycles_expected_msg = f"<= {str(test.max_cycles)}"
+                            else:
+                                accepted_cycles = True
+                                cycles_expected_msg = str(simulated_total_cycles)
                             accepted = accepted and accepted_cycles
                             report_test(
                                 config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=f"<= {str(test.max_cycles)}"),
+                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=cycles_expected_msg),
                                 config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)),
                                 accepted_cycles,
                             )
