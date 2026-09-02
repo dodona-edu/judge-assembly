@@ -1,0 +1,12 @@
+# Paths Dodona leaves out when syncing this repository to the judge's files
+# directory, which is copied into the sandbox for every submission. Only
+# run, assembly_judge.py, the dodona/, evaluation/, exceptions/ and utils/ packages and templates/main.c.mako are read at judging time.
+# Patterns are rsync exclude patterns, anchored to the repository root.
+# See https://github.com/dodona-edu/dodona/issues/8763
+
+/.github/
+/codecov.yaml
+/.coveragerc
+/.gitignore
+/README.md
+/requirements.txt
