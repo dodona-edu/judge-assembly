@@ -1,0 +1,20 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "Configuration error: 'x86-16' is not a valid AssemblyLanguage.",
+      "format": "text",
+      "permission": "staff"
+    }
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "internal error",
+      "human": "Internal error"
+    }
+  }
+]

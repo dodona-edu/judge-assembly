@@ -1,0 +1,142 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "string_length(\"\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Terugkeerwaarde",
+    "expected": "0"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "0",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Aantal klokcycli om je code uit te voeren",
+    "expected": "Uitgevoerd in <= 30 klokcycli"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Uitgevoerd in 23 klokcycli",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "string_length(\"dodona\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Terugkeerwaarde",
+    "expected": "6"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "6",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Aantal klokcycli om je code uit te voeren",
+    "expected": "Uitgevoerd in <= 60 klokcycli"
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "Uitgevoerd in 107 klokcycli",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "string_length(\"assembly language\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Terugkeerwaarde",
+    "expected": "17"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "17",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Aantal klokcycli om je code uit te voeren",
+    "expected": "Uitgevoerd in <= 150 klokcycli"
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "Uitgevoerd in 261 klokcycli",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "wrong",
+      "human": "Test gefaald"
+    }
+  }
+]
