@@ -4,6 +4,8 @@
 # Patterns are rsync exclude patterns, anchored to the repository root.
 # See https://github.com/dodona-edu/dodona/issues/8763
 
+/tests/
+/devel/
 /.github/
 /codecov.yaml
 /.coveragerc

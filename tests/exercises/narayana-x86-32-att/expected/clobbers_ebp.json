@@ -1,0 +1,76 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(0)"
+  },
+  {
+    "command": "append-message",
+    "message": "Crashed while testing"
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(5)"
+  },
+  {
+    "command": "append-message",
+    "message": "Crashed while testing"
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(10)"
+  },
+  {
+    "command": "append-message",
+    "message": "Crashed while testing"
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "wrong",
+      "human": "Test failed"
+    }
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "string_length(\"\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "0"
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Number of clock cycles to execute your code",
+    "expected": "Executed in <= 30 cycles"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Executed in 12 cycles",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "string_length(\"dodona\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "6"
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "7",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Number of clock cycles to execute your code",
+    "expected": "Executed in <= 60 cycles"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Executed in 42 cycles",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "string_length(\"assembly language\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "17"
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "18",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Number of clock cycles to execute your code",
+    "expected": "Executed in <= 150 cycles"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Executed in 97 cycles",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "wrong",
+      "human": "Test failed"
+    }
+  }
+]

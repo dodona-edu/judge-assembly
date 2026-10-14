@@ -1,0 +1,142 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "is_palindrome(\"racecar\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "1"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "1",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Number of clock cycles to execute your code",
+    "expected": "Executed in 279 cycles"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Executed in 279 cycles",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "is_palindrome(\"abca\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "0"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "0",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Number of clock cycles to execute your code",
+    "expected": "Executed in 174 cycles"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Executed in 174 cycles",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "is_palindrome(\"dodona\")"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "0"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "0",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Number of clock cycles to execute your code",
+    "expected": "Executed in 174 cycles"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "Executed in 174 cycles",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "correct",
+      "human": "All tests succeeded"
+    }
+  }
+]

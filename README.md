@@ -54,6 +54,27 @@
 
 See https://github.com/nielsdos/dodona-assembly-exercises/tree/main/exercises/narayana-x86-32-at%26t for a full sample exercise setup.
 
+## Tests
+
+The judge image is built from
+[`dodona-assembly.dockerfile`](https://github.com/dodona-edu/docker-images/blob/master/dodona-assembly.dockerfile)
+in docker-images and published as `ghcr.io/dodona-edu/dodona-assembly`.
+
+`tests/` runs the judge on the submissions in `tests/exercises/*/submissions`
+and compares its feedback with `tests/exercises/*/expected`. The suite runs as
+root inside the judge image: `devel/run-tests.sh` runs it there, as CI does,
+and `devel/run-tests-in-image.sh` starts the image and runs it locally:
+
+```
+devel/run-tests-in-image.sh                                # ghcr.io/dodona-edu/dodona-assembly:latest
+IMAGE=my-image devel/run-tests-in-image.sh -v -k narayana  # another image, unittest arguments
+UPDATE_EXPECTED=1 devel/run-tests-in-image.sh              # rewrite the expected output
+```
+
+Each exercise has an `evaluation/` directory with its plan and a `config.json`
+with the `evaluation` keys Dodona merges into the run configuration. A
+submission named `<case>.nl.s` runs with Dutch as natural language.
+
 ## Acknowledgements
 
 This judge was based on the work of four students of Ghent University for the cross-course project (vakoverschrijdend project ingenieurswetenschappen computerwetenschappen, 2022-2023):

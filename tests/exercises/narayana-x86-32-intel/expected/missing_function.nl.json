@@ -1,0 +1,27 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "De te testen functie werd niet gevonden (typo?).",
+      "format": "text"
+    }
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "/tmp/workdir/submission.s: Assembler messages:\n/tmp/workdir/submission.s: Error: .size expression for narayana does not evaluate to a constant\n",
+      "format": "text"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-judgement",
+    "status": {
+      "enum": "compilation error",
+      "human": "Ongeldige code"
+    }
+  }
+]

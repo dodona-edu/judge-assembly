@@ -1,0 +1,9 @@
+{
+  "plan_name": "plan.json",
+  "assembly": "x86-32-intel",
+  "tested_function": "narayana",
+  "tested_arguments": ["int"],
+  "test_iterations": 1,
+  "measure_performance": false,
+  "check_calling_convention": true
+}

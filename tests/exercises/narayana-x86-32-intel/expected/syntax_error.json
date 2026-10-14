@@ -1,0 +1,33 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "unbalanced brackets in operand 2.",
+      "format": "code"
+    }
+  },
+  {
+    "command": "annotate-code",
+    "row": 2,
+    "text": "unbalanced brackets in operand 2.",
+    "type": "error"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "/tmp/workdir/submission.s: Assembler messages:\n/tmp/workdir/submission.s:6: Error: unbalanced brackets in operand 2.\n",
+      "format": "text"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-judgement",
+    "status": {
+      "enum": "compilation error",
+      "human": "The code is not valid"
+    }
+  }
+]

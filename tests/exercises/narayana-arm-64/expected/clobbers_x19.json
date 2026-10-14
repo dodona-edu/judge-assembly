@@ -1,0 +1,129 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(0)"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "1"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "1",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(5)"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "4"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "4",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: x19 was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(10)"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "28"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "28",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: x19 was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": false,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "wrong",
+      "human": "Test failed"
+    }
+  }
+]

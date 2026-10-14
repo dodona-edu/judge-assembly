@@ -1,0 +1,103 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(0)"
+  },
+  {
+    "command": "start-test",
+    "description": "Terugkeerwaarde",
+    "expected": "1"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "1",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(5)"
+  },
+  {
+    "command": "start-test",
+    "description": "Terugkeerwaarde",
+    "expected": "4"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "4",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "narayana(10)"
+  },
+  {
+    "command": "start-test",
+    "description": "Terugkeerwaarde",
+    "expected": "28"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "28",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "correct",
+      "human": "Alle testen geslaagd"
+    }
+  }
+]
