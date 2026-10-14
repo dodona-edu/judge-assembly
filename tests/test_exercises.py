@@ -25,7 +25,7 @@ UPDATE_EXPECTED = os.environ.get("UPDATE_EXPECTED") == "1"
 JUDGE_TIMEOUT = 120
 LANGUAGES = ("en", "nl")
 
-# The image has no procps, so the pkill in the exit trap of /main.sh fails.
+# In an image without procps, the pkill in the exit trap of /main.sh fails.
 MISSING_PKILL = "/main.sh: 1: pkill: not found\n"
 
 # gcc names its intermediate object files randomly.
@@ -117,6 +117,11 @@ def diff(a, b, a_name, b_name):
         a.splitlines(True), b.splitlines(True), a_name, b_name))
 
 
+def binutils_version():
+    output = subprocess.run(["as", "--version"], capture_output=True, text=True, check=True).stdout
+    return re.search(r"([0-9]+\.[0-9]+)(\.[0-9]+)*$", output.splitlines()[0]).group(1)
+
+
 def cases():
     for exercise in sorted(os.listdir(EXERCISES_DIR)):
         exercise_dir = os.path.join(EXERCISES_DIR, exercise)
@@ -133,6 +138,7 @@ class ExerciseTest(unittest.TestCase):
         cls.addClassCleanup(shutil.rmtree, cls.root)
         cls.judge = os.path.join(cls.root, "judge")
         shutil.copytree(REPO_DIR, cls.judge, ignore=judge_ignore())
+        cls.binutils_version = binutils_version()
 
     def run_judge(self, exercise_dir, submission, language):
         config = {
@@ -171,6 +177,15 @@ class ExerciseTest(unittest.TestCase):
             self.fail("judge wrote no feedback")
         return dump(normalise(feedback))
 
+    def expected_file(self, exercise_dir, case):
+        """<case>.binutils<major>.<minor>.json when it exists for the running
+        binutils version, else <case>.json."""
+        expected_dir = os.path.join(exercise_dir, "expected")
+        versioned = os.path.join(expected_dir, "{}.binutils{}.json".format(case, self.binutils_version))
+        if os.path.exists(versioned):
+            return versioned
+        return os.path.join(expected_dir, case + ".json")
+
     def compare(self, expected_file, output):
         if not os.path.exists(expected_file):
             self.fail("no expected output, run with UPDATE_EXPECTED=1 to create "
@@ -184,7 +199,7 @@ class ExerciseTest(unittest.TestCase):
     def check_case(self, exercise, case):
         exercise_dir = os.path.join(EXERCISES_DIR, exercise)
         submission = os.path.join(exercise_dir, "submissions", case + ".s")
-        expected_file = os.path.join(exercise_dir, "expected", case + ".json")
+        expected_file = self.expected_file(exercise_dir, case)
         suffix = os.path.splitext(case)[1].lstrip(".")
         language = suffix if suffix in LANGUAGES else "en"
 
