@@ -1,0 +1,46 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "bad expression",
+      "format": "code"
+    }
+  },
+  {
+    "command": "annotate-code",
+    "row": 2,
+    "text": "bad expression",
+    "type": "error"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "junk `esp+4' after expression",
+      "format": "code"
+    }
+  },
+  {
+    "command": "annotate-code",
+    "row": 2,
+    "text": "junk `esp+4' after expression",
+    "type": "error"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "/tmp/workdir/submission.s: Assembler messages:\n/tmp/workdir/submission.s:6: Error: bad expression\n/tmp/workdir/submission.s:6: Error: junk `esp+4' after expression\n",
+      "format": "text"
+    }
+  },
+  {
+    "accepted": false,
+    "command": "close-judgement",
+    "status": {
+      "enum": "compilation error",
+      "human": "The code is not valid"
+    }
+  }
+]

@@ -73,7 +73,10 @@ UPDATE_EXPECTED=1 devel/run-tests-in-image.sh              # rewrite the expecte
 
 Each exercise has an `evaluation/` directory with its plan and a `config.json`
 with the `evaluation` keys Dodona merges into the run configuration. A
-submission named `<case>.nl.s` runs with Dutch as natural language.
+submission named `<case>.nl.s` runs with Dutch as natural language. When
+`expected/<case>.binutils<major>.<minor>.json` exists for the binutils version
+of the running image (`as --version`), the suite compares against (and
+`UPDATE_EXPECTED` rewrites) that file instead of `expected/<case>.json`.
 
 ## Acknowledgements
 
