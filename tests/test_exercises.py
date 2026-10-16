@@ -25,9 +25,6 @@ UPDATE_EXPECTED = os.environ.get("UPDATE_EXPECTED") == "1"
 JUDGE_TIMEOUT = 120
 LANGUAGES = ("en", "nl")
 
-# In an image without procps, the pkill in the exit trap of /main.sh fails.
-MISSING_PKILL = "/main.sh: 1: pkill: not found\n"
-
 # gcc names its intermediate object files randomly.
 COMPILER_DETAILS = [
     (re.compile(r"/tmp/cc[0-9A-Za-z]{6}\.o\b"), "/tmp/cc<random>.o"),
@@ -168,7 +165,7 @@ class ExerciseTest(unittest.TestCase):
         self.assertEqual(
             process.returncode, 0,
             "judge exited with {}\nstderr:\n{}".format(process.returncode, process.stderr))
-        self.assertEqual(process.stderr.removesuffix(MISSING_PKILL), "", "judge wrote to stderr")
+        self.assertEqual(process.stderr, "", "judge wrote to stderr")
         try:
             feedback = parse_commands(process.stdout)
         except json.JSONDecodeError as e:
