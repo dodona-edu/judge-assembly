@@ -30,9 +30,11 @@ def amend_submission(config: DodonaConfig):
     if config.assembly == AssemblyLanguage.ARM_32 or config.assembly == AssemblyLanguage.ARM_64:
         global_directive = "global"
         function_type = "%function"
+        section_type = "%progbits"
     else:
         global_directive = "globl"
         function_type = "@function"
+        section_type = "@progbits"
 
     # Note: we surround everything with .type & .size, as if it is one function, such that all the student's
     #       code will be under a single entry in the Valgrind output (as if it were one function).
@@ -43,7 +45,8 @@ def amend_submission(config: DodonaConfig):
     line_shift = len(modified_submission_content) + 1
     modified_submission_content.extend((
         submission_content,
-        f".size {config.tested_function}, .-{config.tested_function}\n", # newline to prevent warning
+        f".size {config.tested_function}, .-{config.tested_function}",
+        f'.section .note.GNU-stack,"",{section_type}\n', # newline to prevent warning
     ))
 
     submission_file = os.path.join(config.workdir, "submission.s")
