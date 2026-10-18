@@ -50,7 +50,7 @@ def report_test(description: str, expected: str, generated: str, accepted: bool)
 def config_error(judge: SimpleNamespace, translator: Translator, msg: str):
     """Show the teacher a configuration error"""
     with Message(
-            permission=MessagePermission.STAFF,
+            permission=MessagePermission.EDUCATOR,
             description=translator.translate(Translator.Text.CONFIG_ERROR, msg=msg),
             format=MessageFormat.TEXT
     ):
@@ -62,7 +62,7 @@ def config_error(judge: SimpleNamespace, translator: Translator, msg: str):
 def unknown_argument_type(judge: SimpleNamespace, translator: Translator, ty: str):
     """Show the teacher an unknown argument type error"""
     with Message(
-            permission=MessagePermission.STAFF,
+            permission=MessagePermission.EDUCATOR,
             description=translator.translate(Translator.Text.UNKNOWN_ARGUMENT_TYPE, ty=ty),
             format=MessageFormat.TEXT
     ):
