@@ -30,7 +30,7 @@ class MessagePermission(str, Enum):
     """Dodona permission for a message"""
 
     STUDENT = "student"
-    STAFF = "staff"
+    EDUCATOR = "educator"
     ZEUS = "zeus"
 
     def __str__(self):

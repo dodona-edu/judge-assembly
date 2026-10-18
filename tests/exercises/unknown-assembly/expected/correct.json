@@ -7,7 +7,7 @@
     "message": {
       "description": "Configuration error: 'x86-16' is not a valid AssemblyLanguage.",
       "format": "text",
-      "permission": "staff"
+      "permission": "educator"
     }
   },
   {
