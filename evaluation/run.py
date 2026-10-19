@@ -1,10 +1,10 @@
-from typing import Optional
-from dodona.dodona_config import DodonaConfig, AssemblyLanguage
-from dodona.translator import Translator
-from exceptions.evaluation_exceptions import TestRuntimeError
+import subprocess
 from dataclasses import dataclass
 from os import path
-import subprocess
+
+from dodona.dodona_config import AssemblyLanguage, DodonaConfig
+from dodona.translator import Translator
+from exceptions.evaluation_exceptions import TestRuntimeError
 
 
 @dataclass
@@ -17,8 +17,8 @@ class TestPerformance:
 @dataclass
 class TestResult:
     generated: str
-    performance: Optional[TestPerformance]
-    calling_convention_error: Optional[str]
+    performance: TestPerformance | None
+    calling_convention_error: str | None
 
 
 def determine_emulator(assembly_language: AssemblyLanguage):
@@ -64,12 +64,9 @@ def run_test(translator: Translator, test_program_path: str, test_id: int, confi
     run_result = subprocess.run(
         command,
         cwd=config.workdir,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
+        capture_output=True,
+        text=True,
     )
-
-    # print(run_result)
 
     if run_result.returncode != 0:
         raise TestRuntimeError(translator, 0, -1)
@@ -81,9 +78,9 @@ def run_test(translator: Translator, test_program_path: str, test_id: int, confi
         with open(path.join(config.workdir, "timing.out")) as cachegrind_out_file:
             for line in cachegrind_out_file:
                 if line == target:
-                    line = cachegrind_out_file.readline()
+                    counts_line = cachegrind_out_file.readline()
                     # Format: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
-                    parts = line.split(" ")
+                    parts = counts_line.split(" ")
                     performance = TestPerformance(
                         instruction_count=int(parts[1]), data_read_count=int(parts[4]), data_write_count=int(parts[7])
                     )

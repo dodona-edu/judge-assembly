@@ -1,9 +1,8 @@
+import re
 from types import SimpleNamespace
 
-from dodona.dodona_command import Message, MessageFormat, ErrorType, Annotation, Test, MessagePermission
+from dodona.dodona_command import Annotation, ErrorType, Message, MessageFormat, MessagePermission, Test
 from dodona.dodona_config import DodonaConfig
-import re
-
 from dodona.translator import Translator
 
 
@@ -21,19 +20,20 @@ def compile_error(judge: SimpleNamespace, config: DodonaConfig, compile_error_me
             # Code error
             matches = re.search(r"submission.s:(\d+): Error: (.*)$", error_message)
             if matches:
-                with Message(description=matches.group(2), format=MessageFormat.CODE):
-                    with Annotation(row=int(matches.group(1)) - line_shift, text=matches.group(2), type="error"):
-                        pass
-    else:
-        # Every other error passed as-is
-        with Message(description=compile_error_message, format=MessageFormat.TEXT):
-            pass
+                with (
+                    Message(description=matches.group(2), format=MessageFormat.CODE),
+                    Annotation(row=int(matches.group(1)) - line_shift, text=matches.group(2), type="error"),
+                ):
+                    pass
+    # Every other error passed as-is
+    with Message(description=compile_error_message, format=MessageFormat.TEXT):
+        pass
 
     judge.status = config.translator.error_status(ErrorType.COMPILATION_ERROR)
     judge.accepted = False
 
 
-def report_test(description: str, expected: str, generated: str, accepted: bool):
+def report_test(description: str, expected: str, generated: str, *, accepted: bool):
     """Report test results to the student"""
     with Test(
         description=description,

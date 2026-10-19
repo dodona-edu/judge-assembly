@@ -1,12 +1,13 @@
+import random
+import subprocess
+from os import path
+from types import SimpleNamespace
+
+from mako.template import Template
+
 from dodona.dodona_config import AssemblyLanguage, DodonaConfig
 from evaluation.arguments import format_arguments
 from exceptions.evaluation_exceptions import ValidationError
-from mako.template import Template
-from types import SimpleNamespace
-from os import path
-import subprocess
-import random
-
 from utils.file_loaders import text_loader
 
 
@@ -30,17 +31,18 @@ def determine_compile_command_and_options(assembly_language: AssemblyLanguage):
             compile_command = "aarch64-linux-gnu-gcc"
             compile_options.append("-static")
         case _:
-            raise NotImplementedError(f"Assembly language {assembly_language} is not implemented")
+            message = f"Assembly language {assembly_language} is not implemented"
+            raise NotImplementedError(message)
     return compile_command, compile_options
 
 
 def random_magic_number_generator():
-    return random.randint(-(2**63), 2**63 - 1)
+    return random.randint(-(2**63), 2**63 - 1)  # noqa: S311
 
 
 def write_main_file(config: DodonaConfig, plan: SimpleNamespace):
     """Writes the main.c file responsible as a wrapper for the submission code."""
-    template = Template(text_loader(path.join(config.judge, "templates/main.c.mako")))
+    template = Template(text_loader(path.join(config.judge, "templates/main.c.mako")))  # noqa: S702
 
     with open(path.join(config.workdir, "main.c"), "w") as main_file:
         main_file.write(
@@ -64,11 +66,10 @@ def run_compilation(config: DodonaConfig, plan: SimpleNamespace, submission_file
     compile_options += [submission_file_path, path.join(config.workdir, "main.c"), "-o", "program"]
 
     compile_result = subprocess.run(
-        [compile_command] + compile_options,
+        [compile_command, *compile_options],
         cwd=config.workdir,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
+        capture_output=True,
+        text=True,
     )
 
     if compile_result.returncode != 0:

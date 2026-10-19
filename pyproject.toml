@@ -39,7 +39,7 @@ ignore = [
 "assembly_judge.py" = ["C901", "PLR0915"]
 # Diverged copy shared across judges: formatting and autofixes only.
 # UP042 would turn the (str, Enum) classes into StrEnum, which changes their str() and format() behaviour.
-"dodona/dodona_command.py" = ["B024", "PYI036", "SIM108", "UP042"]
+"dodona/dodona_command.py" = ["B024", "SIM108", "UP042"]
 # The asserts in sanity_check() are deliberate.
 "dodona/dodona_config.py" = ["S101"]
 # gcc's temp file name is matched literally, and unittest discover runs tests/ as a plain directory, not a package.

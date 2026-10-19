@@ -4,5 +4,5 @@ util file with functions to load specific types of files
 
 
 def text_loader(file_path: str) -> str:
-    with open(file_path, "r") as file:
+    with open(file_path) as file:
         return file.read()

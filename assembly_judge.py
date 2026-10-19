@@ -1,18 +1,18 @@
+import json
 import os
 import sys
 from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, MessageFormat
-from dodona.dodona_config import DodonaConfig, AssemblyLanguage
+from dodona.dodona_command import Context, ErrorType, Judgement, Message, MessageFormat, Tab, TestCase
+from dodona.dodona_config import AssemblyLanguage, DodonaConfig
 from dodona.translator import Translator
 from evaluation.arguments import format_arguments
-from exceptions.config_exceptions import UnknownArgumentTypeError
-from utils.file_loaders import text_loader
-from exceptions.evaluation_exceptions import ValidationError, TestRuntimeError
-from utils.messages import compile_error, report_test, config_error, unknown_argument_type
 from evaluation.compilation import run_compilation
 from evaluation.run import run_test
-import json
+from exceptions.config_exceptions import UnknownArgumentTypeError
+from exceptions.evaluation_exceptions import TestRuntimeError, ValidationError
+from utils.file_loaders import text_loader
+from utils.messages import compile_error, config_error, report_test, unknown_argument_type
 
 
 def amend_submission(config: DodonaConfig):
@@ -24,10 +24,10 @@ def amend_submission(config: DodonaConfig):
 
     modified_submission_content = []
 
-    if config.assembly == AssemblyLanguage.X86_32_INTEL or config.assembly == AssemblyLanguage.X86_64_INTEL:
+    if config.assembly in (AssemblyLanguage.X86_32_INTEL, AssemblyLanguage.X86_64_INTEL):
         modified_submission_content.append(".intel_syntax noprefix")
 
-    if config.assembly == AssemblyLanguage.ARM_32 or config.assembly == AssemblyLanguage.ARM_64:
+    if config.assembly in (AssemblyLanguage.ARM_32, AssemblyLanguage.ARM_64):
         global_directive = "global"
         function_type = "%function"
         section_type = "%progbits"
@@ -87,7 +87,7 @@ def main():
         submission_file, line_shift = amend_submission(config)
 
         # Load test plan
-        with open(os.path.join(config.resources, config.plan_name), "r") as plan_file:
+        with open(os.path.join(config.resources, config.plan_name)) as plan_file:
             plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
 
         # Compile code
@@ -119,7 +119,7 @@ def main():
                             config.translator.translate(Translator.Text.RETURN_VALUE),
                             expected,
                             test_result.generated,
-                            accepted,
+                            accepted=accepted,
                         )
 
                         # Time measurement test
@@ -132,7 +132,7 @@ def main():
                             )
                             if hasattr(test, "max_cycles"):
                                 accepted_cycles = simulated_total_cycles <= test.max_cycles
-                                cycles_expected_msg = f"<= {str(test.max_cycles)}"
+                                cycles_expected_msg = f"<= {test.max_cycles}"
                             else:
                                 accepted_cycles = True
                                 cycles_expected_msg = str(simulated_total_cycles)
@@ -145,7 +145,7 @@ def main():
                                 config.translator.translate(
                                     Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)
                                 ),
-                                accepted_cycles,
+                                accepted=accepted_cycles,
                             )
 
                         # Calling convention test
@@ -159,7 +159,7 @@ def main():
                                     config.translator.translate(
                                         Translator.Text.CALLING_CONVENTION_MSG, msg=test_result.calling_convention_error
                                     ),
-                                    accepted_calling_convention,
+                                    accepted=accepted_calling_convention,
                                 )
                     except TestRuntimeError as e:
                         with Message(str(e)):

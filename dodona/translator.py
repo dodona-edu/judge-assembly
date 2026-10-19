@@ -1,7 +1,7 @@
 """translate judge output towards Dodona"""
 
 from enum import Enum, auto
-from typing import Dict
+from typing import ClassVar
 
 from dodona.dodona_command import ErrorType
 
@@ -44,7 +44,7 @@ class Translator:
         self.language = language
 
     @classmethod
-    def from_str(cls, language: str) -> "Translator":
+    def from_str(cls, language: str) -> Translator:
         """created a Translator instance
         If the language is not detected correctly or not supported
         the translator defaults to English (EN).
@@ -64,7 +64,7 @@ class Translator:
         """
         return self.error_translations[self.language][error]
 
-    def error_status(self, error: ErrorType, **kwargs) -> Dict[str, str]:
+    def error_status(self, error: ErrorType, **kwargs) -> dict[str, str]:
         """translate an ErrorType enum into a status object
         :param error: ErrorType enum
         :return: Dodona status object
@@ -82,7 +82,7 @@ class Translator:
         """
         return self.text_translations[self.language][message].format(**kwargs)
 
-    error_translations = {
+    error_translations: ClassVar[dict[Language, dict[ErrorType, str]]] = {
         Language.EN: {
             ErrorType.INTERNAL_ERROR: "Internal error",
             ErrorType.COMPILATION_ERROR: "The code is not valid",
@@ -109,7 +109,7 @@ class Translator:
         },
     }
 
-    text_translations = {
+    text_translations: ClassVar[dict[Language, dict[Text, str]]] = {
         Language.EN: {
             Text.FAILED_TESTS: "{amount} test(s) failed.",
             Text.CONFIG_ERROR: "Configuration error: {msg}.",

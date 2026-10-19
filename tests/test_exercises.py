@@ -56,7 +56,8 @@ def judge_ignore():
 def make_sandbox_root():
     # Dodona mounts everything under /mnt/<random>/.
     if not os.access("/mnt", os.W_OK):
-        raise RuntimeError("/mnt is not writable: run the suite as root, like CI")
+        message = "/mnt is not writable: run the suite as root, like CI"
+        raise RuntimeError(message)
     return tempfile.mkdtemp(dir="/mnt")
 
 
@@ -109,12 +110,12 @@ def dump(value):
 
 
 def diff(a, b, a_name, b_name):
-    return "".join(difflib.unified_diff(a.splitlines(True), b.splitlines(True), a_name, b_name))
+    return "".join(difflib.unified_diff(a.splitlines(keepends=True), b.splitlines(keepends=True), a_name, b_name))
 
 
 def binutils_version():
     output = subprocess.run(["as", "--version"], capture_output=True, text=True, check=True).stdout
-    return re.search(r"([0-9]+\.[0-9]+)(\.[0-9]+)*$", output.splitlines()[0]).group(1)
+    return re.search(r"([0-9]+\.[0-9]+)(\.[0-9]+)*$", output.splitlines()[0]).group(1)  # ty: ignore[unresolved-attribute]
 
 
 def cases():
@@ -163,14 +164,12 @@ class ExerciseTest(unittest.TestCase):
     def feedback(self, exercise_dir, submission, language):
         """The normalised feedback of one judge run, as JSON text."""
         process = self.run_judge(exercise_dir, submission, language)
-        self.assertEqual(
-            process.returncode, 0, "judge exited with {}\nstderr:\n{}".format(process.returncode, process.stderr)
-        )
+        self.assertEqual(process.returncode, 0, f"judge exited with {process.returncode}\nstderr:\n{process.stderr}")
         self.assertEqual(process.stderr, "", "judge wrote to stderr")
         try:
             feedback = parse_commands(process.stdout)
         except json.JSONDecodeError as e:
-            self.fail("judge output is not JSON ({})\nstdout:\n{}".format(e, process.stdout))
+            self.fail(f"judge output is not JSON ({e})\nstdout:\n{process.stdout}")
         if not feedback:
             self.fail("judge wrote no feedback")
         return dump(normalise(feedback))
@@ -179,7 +178,7 @@ class ExerciseTest(unittest.TestCase):
         """<case>.binutils<major>.<minor>.json when it exists for the running
         binutils version, else <case>.json."""
         expected_dir = os.path.join(exercise_dir, "expected")
-        versioned = os.path.join(expected_dir, "{}.binutils{}.json".format(case, self.binutils_version))
+        versioned = os.path.join(expected_dir, f"{case}.binutils{self.binutils_version}.json")
         if os.path.exists(versioned):
             return versioned
         return os.path.join(expected_dir, case + ".json")
@@ -213,7 +212,7 @@ class ExerciseTest(unittest.TestCase):
 for exercise, case in cases():
     setattr(
         ExerciseTest,
-        re.sub(r"\W", "_", "test_{}_{}".format(exercise, case)),
+        re.sub(r"\W", "_", f"test_{exercise}_{case}"),
         lambda self, exercise=exercise, case=case: self.check_case(exercise, case),
     )
 
