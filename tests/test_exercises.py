@@ -46,8 +46,7 @@ def judge_ignore():
             if os.path.isdir(os.path.join(directory, name)):
                 path += "/"
             # Only anchored patterns; a trailing slash matches directories only.
-            if any(fnmatch.fnmatchcase(path, p) or fnmatch.fnmatchcase(path, p + "/")
-                   for p in patterns):
+            if any(fnmatch.fnmatchcase(path, p) or fnmatch.fnmatchcase(path, p + "/") for p in patterns):
                 ignored.add(name)
         return ignored
 
@@ -110,8 +109,7 @@ def dump(value):
 
 
 def diff(a, b, a_name, b_name):
-    return "".join(difflib.unified_diff(
-        a.splitlines(True), b.splitlines(True), a_name, b_name))
+    return "".join(difflib.unified_diff(a.splitlines(True), b.splitlines(True), a_name, b_name))
 
 
 def binutils_version():
@@ -123,7 +121,7 @@ def cases():
     for exercise in sorted(os.listdir(EXERCISES_DIR)):
         exercise_dir = os.path.join(EXERCISES_DIR, exercise)
         for submission in sorted(glob.glob(os.path.join(exercise_dir, "submissions", "*.s"))):
-            yield exercise, os.path.basename(submission)[:-len(".s")]
+            yield exercise, os.path.basename(submission)[: -len(".s")]
 
 
 class ExerciseTest(unittest.TestCase):
@@ -144,11 +142,13 @@ class ExerciseTest(unittest.TestCase):
         }
         with open(os.path.join(exercise_dir, "config.json")) as f:
             config.update(json.load(f))
-        config.update({
-            "programming_language": "assembly",
-            "natural_language": language,
-            "judge": self.judge,
-        })
+        config.update(
+            {
+                "programming_language": "assembly",
+                "natural_language": language,
+                "judge": self.judge,
+            }
+        )
         with sandbox(self.root, exercise_dir, submission) as paths:
             config.update(paths)
             return subprocess.run(
@@ -157,14 +157,15 @@ class ExerciseTest(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 cwd=paths["workdir"],
-                timeout=JUDGE_TIMEOUT)
+                timeout=JUDGE_TIMEOUT,
+            )
 
     def feedback(self, exercise_dir, submission, language):
         """The normalised feedback of one judge run, as JSON text."""
         process = self.run_judge(exercise_dir, submission, language)
         self.assertEqual(
-            process.returncode, 0,
-            "judge exited with {}\nstderr:\n{}".format(process.returncode, process.stderr))
+            process.returncode, 0, "judge exited with {}\nstderr:\n{}".format(process.returncode, process.stderr)
+        )
         self.assertEqual(process.stderr, "", "judge wrote to stderr")
         try:
             feedback = parse_commands(process.stdout)
@@ -185,13 +186,13 @@ class ExerciseTest(unittest.TestCase):
 
     def compare(self, expected_file, output):
         if not os.path.exists(expected_file):
-            self.fail("no expected output, run with UPDATE_EXPECTED=1 to create "
-                      + os.path.relpath(expected_file, REPO_DIR))
+            self.fail(
+                "no expected output, run with UPDATE_EXPECTED=1 to create " + os.path.relpath(expected_file, REPO_DIR)
+            )
         with open(expected_file) as f:
             expected = dump(json.load(f))
         if output != expected:
-            self.fail("output differs from the expected output:\n"
-                      + diff(expected, output, "expected", "actual"))
+            self.fail("output differs from the expected output:\n" + diff(expected, output, "expected", "actual"))
 
     def check_case(self, exercise, case):
         exercise_dir = os.path.join(EXERCISES_DIR, exercise)
@@ -210,8 +211,11 @@ class ExerciseTest(unittest.TestCase):
 
 
 for exercise, case in cases():
-    setattr(ExerciseTest, re.sub(r"\W", "_", "test_{}_{}".format(exercise, case)),
-            lambda self, exercise=exercise, case=case: self.check_case(exercise, case))
+    setattr(
+        ExerciseTest,
+        re.sub(r"\W", "_", "test_{}_{}".format(exercise, case)),
+        lambda self, exercise=exercise, case=case: self.check_case(exercise, case),
+    )
 
 
 if __name__ == "__main__":

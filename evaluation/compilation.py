@@ -35,7 +35,7 @@ def determine_compile_command_and_options(assembly_language: AssemblyLanguage):
 
 
 def random_magic_number_generator():
-    return random.randint(-2 ** 63, 2 ** 63 - 1)
+    return random.randint(-(2**63), 2**63 - 1)
 
 
 def write_main_file(config: DodonaConfig, plan: SimpleNamespace):
@@ -43,15 +43,17 @@ def write_main_file(config: DodonaConfig, plan: SimpleNamespace):
     template = Template(text_loader(path.join(config.judge, "templates/main.c.mako")))
 
     with open(path.join(config.workdir, "main.c"), "w") as main_file:
-        main_file.write(template.render(
-            tested_function=config.tested_function,
-            tested_arguments=config.tested_arguments,
-            test_iterations=config.test_iterations,
-            format_arguments=format_arguments,
-            random_magic_number_generator=random_magic_number_generator,
-            check_calling_convention=config.check_calling_convention,
-            plan=plan
-        ))
+        main_file.write(
+            template.render(
+                tested_function=config.tested_function,
+                tested_arguments=config.tested_arguments,
+                test_iterations=config.test_iterations,
+                format_arguments=format_arguments,
+                random_magic_number_generator=random_magic_number_generator,
+                check_calling_convention=config.check_calling_convention,
+                plan=plan,
+            )
+        )
 
 
 def run_compilation(config: DodonaConfig, plan: SimpleNamespace, submission_file_path: str) -> str:

@@ -38,16 +38,20 @@ def amend_submission(config: DodonaConfig):
 
     # Note: we surround everything with .type & .size, as if it is one function, such that all the student's
     #       code will be under a single entry in the Valgrind output (as if it were one function).
-    modified_submission_content.extend((
-        f".{global_directive} {config.tested_function}",
-        f".type {config.tested_function}, {function_type}",
-    ))
+    modified_submission_content.extend(
+        (
+            f".{global_directive} {config.tested_function}",
+            f".type {config.tested_function}, {function_type}",
+        )
+    )
     line_shift = len(modified_submission_content) + 1
-    modified_submission_content.extend((
-        submission_content,
-        f".size {config.tested_function}, .-{config.tested_function}",
-        f'.section .note.GNU-stack,"",{section_type}\n', # newline to prevent warning
-    ))
+    modified_submission_content.extend(
+        (
+            submission_content,
+            f".size {config.tested_function}, .-{config.tested_function}",
+            f'.section .note.GNU-stack,"",{section_type}\n',  # newline to prevent warning
+        )
+    )
 
     submission_file = os.path.join(config.workdir, "submission.s")
     with open(submission_file, "w") as modified_submission_file:
@@ -94,7 +98,7 @@ def main():
             return
 
         # Run the tests
-        with Tab('Feedback'):
+        with Tab("Feedback"):
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
                 try:
@@ -121,10 +125,12 @@ def main():
                         # Time measurement test
                         if test_result.performance:
                             # Combine the performance counters into a total number of cycles
-                            simulated_total_cycles = config.performance_cycle_factor_instructions * test_result.performance.instruction_count \
-                                                     + config.performance_cycle_factor_data_reads * test_result.performance.data_read_count \
-                                                     + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
-                            if hasattr(test, 'max_cycles'):
+                            simulated_total_cycles = (
+                                config.performance_cycle_factor_instructions * test_result.performance.instruction_count
+                                + config.performance_cycle_factor_data_reads * test_result.performance.data_read_count
+                                + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
+                            )
+                            if hasattr(test, "max_cycles"):
                                 accepted_cycles = simulated_total_cycles <= test.max_cycles
                                 cycles_expected_msg = f"<= {str(test.max_cycles)}"
                             else:
@@ -133,8 +139,12 @@ def main():
                             accepted = accepted and accepted_cycles
                             report_test(
                                 config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=cycles_expected_msg),
-                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)),
+                                config.translator.translate(
+                                    Translator.Text.EXECUTED_IN_CYCLES, msg=cycles_expected_msg
+                                ),
+                                config.translator.translate(
+                                    Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)
+                                ),
                                 accepted_cycles,
                             )
 
@@ -146,7 +156,9 @@ def main():
                                 report_test(
                                     config.translator.translate(Translator.Text.CALLING_CONVENTION_VIOLATION),
                                     "",
-                                    config.translator.translate(Translator.Text.CALLING_CONVENTION_MSG, msg=test_result.calling_convention_error),
+                                    config.translator.translate(
+                                        Translator.Text.CALLING_CONVENTION_MSG, msg=test_result.calling_convention_error
+                                    ),
                                     accepted_calling_convention,
                                 )
                     except TestRuntimeError as e:

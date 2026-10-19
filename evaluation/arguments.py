@@ -15,5 +15,4 @@ def format_argument(argument):
 
 
 def format_arguments(arguments):
-    return ', '.join(map(format_argument, arguments))
-
+    return ", ".join(map(format_argument, arguments))

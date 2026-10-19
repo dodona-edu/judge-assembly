@@ -128,7 +128,7 @@ class Translator:
             Text.LINE: "line",
             Text.AT_LINE: "at line",
             Text.POSITION: "position",
-            Text.SUBMISSION: "Submission"
+            Text.SUBMISSION: "Submission",
         },
         Language.NL: {
             Text.FAILED_TESTS: "{amount} test(en) gefaald.",
@@ -148,6 +148,6 @@ class Translator:
             Text.LINE: "regel",
             Text.AT_LINE: "op regel",
             Text.POSITION: "positie",
-            Text.SUBMISSION: "Indiening"
-        }
+            Text.SUBMISSION: "Indiening",
+        },
     }

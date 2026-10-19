@@ -46,13 +46,15 @@ def run_test(translator: Translator, test_program_path: str, test_id: int, confi
     command = [test_program_path, str(test_id)]
 
     if config.measure_performance:
-        command = [determine_valgrind(config.assembly),
-                   "--tool=cachegrind",
-                   "--cache-sim=yes",
-                   "--log-file=/dev/null",
-                   "--cachegrind-out-file=timing.out",
-                   "--quiet",
-                   *command]
+        command = [
+            determine_valgrind(config.assembly),
+            "--tool=cachegrind",
+            "--cache-sim=yes",
+            "--log-file=/dev/null",
+            "--cachegrind-out-file=timing.out",
+            "--quiet",
+            *command,
+        ]
 
     # May need an emulator depending on the architecture
     emulator = determine_emulator(config.assembly)
@@ -67,7 +69,7 @@ def run_test(translator: Translator, test_program_path: str, test_id: int, confi
         universal_newlines=True,
     )
 
-    #print(run_result)
+    # print(run_result)
 
     if run_result.returncode != 0:
         raise TestRuntimeError(translator, 0, -1)
@@ -80,17 +82,15 @@ def run_test(translator: Translator, test_program_path: str, test_id: int, confi
             for line in cachegrind_out_file:
                 if line == target:
                     line = cachegrind_out_file.readline()
-                    # Format: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw 
-                    parts = line.split(' ')
+                    # Format: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+                    parts = line.split(" ")
                     performance = TestPerformance(
-                        instruction_count=int(parts[1]),
-                        data_read_count=int(parts[4]),
-                        data_write_count=int(parts[7])
+                        instruction_count=int(parts[1]), data_read_count=int(parts[4]), data_write_count=int(parts[7])
                     )
                     break
 
     return TestResult(
         generated=run_result.stdout,
         performance=performance,
-        calling_convention_error=run_result.stderr if config.check_calling_convention else None
+        calling_convention_error=run_result.stderr if config.check_calling_convention else None,
     )
