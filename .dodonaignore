@@ -9,6 +9,9 @@
 /.github/
 /codecov.yaml
 /.coveragerc
+/pyproject.toml
+/requirements-dev.txt
 /.gitignore
+/.tool-versions
 /README.md
 /requirements.txt
