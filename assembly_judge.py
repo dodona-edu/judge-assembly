@@ -1,18 +1,18 @@
+import json
 import os
 import sys
 from types import SimpleNamespace
 
-from dodona.dodona_command import Judgement, Message, ErrorType, Tab, Context, TestCase, MessageFormat
-from dodona.dodona_config import DodonaConfig, AssemblyLanguage
+from dodona.dodona_command import Context, ErrorType, Judgement, Message, MessageFormat, Tab, TestCase
+from dodona.dodona_config import AssemblyLanguage, DodonaConfig
 from dodona.translator import Translator
 from evaluation.arguments import format_arguments
-from exceptions.config_exceptions import UnknownArgumentTypeError
-from utils.file_loaders import text_loader
-from exceptions.evaluation_exceptions import ValidationError, TestRuntimeError
-from utils.messages import compile_error, report_test, config_error, unknown_argument_type
 from evaluation.compilation import run_compilation
 from evaluation.run import run_test
-import json
+from exceptions.config_exceptions import UnknownArgumentTypeError
+from exceptions.evaluation_exceptions import TestRuntimeError, ValidationError
+from utils.file_loaders import text_loader
+from utils.messages import compile_error, config_error, report_test, unknown_argument_type
 
 
 def amend_submission(config: DodonaConfig):
@@ -24,10 +24,10 @@ def amend_submission(config: DodonaConfig):
 
     modified_submission_content = []
 
-    if config.assembly == AssemblyLanguage.X86_32_INTEL or config.assembly == AssemblyLanguage.X86_64_INTEL:
+    if config.assembly in (AssemblyLanguage.X86_32_INTEL, AssemblyLanguage.X86_64_INTEL):
         modified_submission_content.append(".intel_syntax noprefix")
 
-    if config.assembly == AssemblyLanguage.ARM_32 or config.assembly == AssemblyLanguage.ARM_64:
+    if config.assembly in (AssemblyLanguage.ARM_32, AssemblyLanguage.ARM_64):
         global_directive = "global"
         function_type = "%function"
         section_type = "%progbits"
@@ -38,16 +38,20 @@ def amend_submission(config: DodonaConfig):
 
     # Note: we surround everything with .type & .size, as if it is one function, such that all the student's
     #       code will be under a single entry in the Valgrind output (as if it were one function).
-    modified_submission_content.extend((
-        f".{global_directive} {config.tested_function}",
-        f".type {config.tested_function}, {function_type}",
-    ))
+    modified_submission_content.extend(
+        (
+            f".{global_directive} {config.tested_function}",
+            f".type {config.tested_function}, {function_type}",
+        )
+    )
     line_shift = len(modified_submission_content) + 1
-    modified_submission_content.extend((
-        submission_content,
-        f".size {config.tested_function}, .-{config.tested_function}",
-        f'.section .note.GNU-stack,"",{section_type}\n', # newline to prevent warning
-    ))
+    modified_submission_content.extend(
+        (
+            submission_content,
+            f".size {config.tested_function}, .-{config.tested_function}",
+            f'.section .note.GNU-stack,"",{section_type}\n',  # newline to prevent warning
+        )
+    )
 
     submission_file = os.path.join(config.workdir, "submission.s")
     with open(submission_file, "w") as modified_submission_file:
@@ -83,7 +87,7 @@ def main():
         submission_file, line_shift = amend_submission(config)
 
         # Load test plan
-        with open(os.path.join(config.resources, config.plan_name), "r") as plan_file:
+        with open(os.path.join(config.resources, config.plan_name)) as plan_file:
             plan = json.load(plan_file, object_hook=lambda d: SimpleNamespace(**d))
 
         # Compile code
@@ -94,7 +98,7 @@ def main():
             return
 
         # Run the tests
-        with Tab('Feedback'):
+        with Tab("Feedback"):
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
                 try:
@@ -115,27 +119,33 @@ def main():
                             config.translator.translate(Translator.Text.RETURN_VALUE),
                             expected,
                             test_result.generated,
-                            accepted,
+                            accepted=accepted,
                         )
 
                         # Time measurement test
                         if test_result.performance:
                             # Combine the performance counters into a total number of cycles
-                            simulated_total_cycles = config.performance_cycle_factor_instructions * test_result.performance.instruction_count \
-                                                     + config.performance_cycle_factor_data_reads * test_result.performance.data_read_count \
-                                                     + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
-                            if hasattr(test, 'max_cycles'):
+                            simulated_total_cycles = (
+                                config.performance_cycle_factor_instructions * test_result.performance.instruction_count
+                                + config.performance_cycle_factor_data_reads * test_result.performance.data_read_count
+                                + config.performance_cycle_factor_data_writes * test_result.performance.data_write_count
+                            )
+                            if hasattr(test, "max_cycles"):
                                 accepted_cycles = simulated_total_cycles <= test.max_cycles
-                                cycles_expected_msg = f"<= {str(test.max_cycles)}"
+                                cycles_expected_msg = f"<= {test.max_cycles}"
                             else:
                                 accepted_cycles = True
                                 cycles_expected_msg = str(simulated_total_cycles)
                             accepted = accepted and accepted_cycles
                             report_test(
                                 config.translator.translate(Translator.Text.MEASURED_CYCLES),
-                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=cycles_expected_msg),
-                                config.translator.translate(Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)),
-                                accepted_cycles,
+                                config.translator.translate(
+                                    Translator.Text.EXECUTED_IN_CYCLES, msg=cycles_expected_msg
+                                ),
+                                config.translator.translate(
+                                    Translator.Text.EXECUTED_IN_CYCLES, msg=str(simulated_total_cycles)
+                                ),
+                                accepted=accepted_cycles,
                             )
 
                         # Calling convention test
@@ -146,8 +156,10 @@ def main():
                                 report_test(
                                     config.translator.translate(Translator.Text.CALLING_CONVENTION_VIOLATION),
                                     "",
-                                    config.translator.translate(Translator.Text.CALLING_CONVENTION_MSG, msg=test_result.calling_convention_error),
-                                    accepted_calling_convention,
+                                    config.translator.translate(
+                                        Translator.Text.CALLING_CONVENTION_MSG, msg=test_result.calling_convention_error
+                                    ),
+                                    accepted=accepted_calling_convention,
                                 )
                     except TestRuntimeError as e:
                         with Message(str(e)):

@@ -2,9 +2,9 @@
 
 import json
 import os
+from enum import Enum
 from types import SimpleNamespace
 from typing import TextIO
-from enum import Enum
 
 
 class AssemblyLanguage(Enum):
@@ -25,9 +25,9 @@ class DodonaConfig(SimpleNamespace):
                                                 can use this value to cut of the tests, so he might be able to give more
                                                 feedback to the student than just the default "Memory limit exceeded."
         time_limit:                             An integer, the time limit in seconds. Just like the memory
-                                                limit, the docker will be killed if the judging takes longer. Can be used
-                                                to for instance specify the specific test case the limit would be exceeded,
-                                                instead of just "Time limit exceeded."
+                                                limit, the docker will be killed if the judging takes longer. Can be
+                                                used to for instance specify the specific test case the limit would be
+                                                exceeded, instead of just "Time limit exceeded."
         programming_language:                   The full name (e.g. "python", "haskell") of the
                                                 programming language the student submitted his code for.
         natural_language:                       The natural language (e.g. "nl", "en") in which the
@@ -42,9 +42,12 @@ class DodonaConfig(SimpleNamespace):
         tested_arguments:                       An array of argument types for the tested function.
         test_iterations:                        How many times each test will be run.
         measure_performance:                    Measure performance in cycles.
-        performance_cycle_factor_instructions:  The multiplication factor to use in computing the cycles for the instructions.
-        performance_cycle_factor_data_reads:    The multiplication factor to use in computing the cycles for the data reads.
-        performance_cycle_factor_data_writes:   The multiplication factor to use in computing the cycles for the data writes.
+        performance_cycle_factor_instructions:  The multiplication factor to use in computing the cycles for the
+                                                instructions.
+        performance_cycle_factor_data_reads:    The multiplication factor to use in computing the cycles for the data
+                                                reads.
+        performance_cycle_factor_data_writes:   The multiplication factor to use in computing the cycles for the data
+                                                writes.
         check_calling_convention:               Whether the calling convention should be checked.
     """
 
@@ -74,7 +77,7 @@ class DodonaConfig(SimpleNamespace):
         self.check_calling_convention = bool(self.check_calling_convention)
 
     @classmethod
-    def from_json(cls, json_file: TextIO) -> "DodonaConfig":
+    def from_json(cls, json_file: TextIO) -> DodonaConfig:
         """decode json filestream into a DodonaConfig object
         :param json_file: input json-encoded filestream
         :return: decoded Dodona judge config
@@ -94,5 +97,6 @@ class DodonaConfig(SimpleNamespace):
 
         # Make sure that this file is located right below the judge folder
         script_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-        assert os.path.realpath(script_path) == os.path.realpath(
-            self.judge), f"{os.path.realpath(script_path)} | {os.path.realpath(self.judge)}"
+        assert os.path.realpath(script_path) == os.path.realpath(self.judge), (
+            f"{os.path.realpath(script_path)} | {os.path.realpath(self.judge)}"
+        )

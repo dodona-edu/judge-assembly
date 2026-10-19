@@ -1,0 +1,46 @@
+[tool.ruff]
+line-length = 120
+# Keep in step with .tool-versions; ruff defaults to py310 and can't infer it without a [project] table.
+target-version = "py315"
+
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+    # Conflicts with the formatter.
+    "COM812",
+    # This repo has no copyright headers.
+    "CPY001",
+    # Exception class names are shared with the other judges' copies of dodona/ and exceptions/.
+    "N818",
+    # The suite is unittest-style by choice.
+    "PT009",
+    "PT027",
+    # The judge runs gcc, valgrind and qemu by design and reads returncode itself; check=True would turn
+    # a failing compile or test run into an uncaught CalledProcessError.
+    "S603",
+    "S607",
+    "PLW1510",
+    # Paths are plain strings end to end (config fields, subprocess arguments, Mako); moving to pathlib is its own PR.
+    "PTH",
+    # Annotation-only imports stay real.
+    "TC001",
+    "TC002",
+    "TC003",
+    # Deferred, each is its own PR:
+    # D   a documentation pass (missing docstrings, summary line style).
+    # ANN a type annotation pass.
+    "D",
+    "ANN",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# main() is the judge's one straight-line flow; splitting it up is a refactor, not a lint fix.
+"assembly_judge.py" = ["C901", "PLR0915"]
+# Diverged copy shared across judges: formatting and autofixes only.
+# UP042 would turn the (str, Enum) classes into StrEnum, which changes their str() and format() behaviour.
+"dodona/dodona_command.py" = ["B024", "SIM108", "UP042"]
+# The asserts in sanity_check() are deliberate.
+"dodona/dodona_config.py" = ["S101"]
+# gcc's temp file name is matched literally, and unittest discover runs tests/ as a plain directory, not a package.
+"tests/*" = ["INP001", "S108"]

@@ -5,7 +5,6 @@ import sys
 from abc import ABC
 from enum import Enum
 from types import SimpleNamespace, TracebackType
-from typing import Union, Dict, Type, Optional
 
 
 class ErrorType(str, Enum):
@@ -77,10 +76,10 @@ class DodonaException(Exception):
     """
 
     def __init__(
-            self,
-            status: Dict[str, str],
-            *args,
-            **kwargs,
+        self,
+        status: dict[str, str],
+        *args,
+        **kwargs,
     ):
         super().__init__()
         self.status = status
@@ -124,16 +123,16 @@ class DodonaCommand(ABC):
         """name used in start and close messages, defaults to the lowercase version of the classname"""
         return self.__class__.__name__.lower()
 
-    def start_msg(self) -> dict:
+    def start_msg(self) -> dict | None:
         """start message that is printed as JSON to stdout when entering the 'with' block"""
         return {"command": f"start-{self.name()}", **self.start_args.__dict__}
 
-    def close_msg(self) -> dict:
+    def close_msg(self) -> dict | None:
         """close message that is printed as JSON to stdout when exiting the 'with' block"""
         return {"command": f"close-{self.name()}", **self.close_args.__dict__}
 
     @staticmethod
-    def __print_command(result: Union[None, dict]) -> None:
+    def __print_command(result: dict | None) -> None:
         """print the provided to stdout as JSON
         :param result: dict that will be JSON encoded and printed to stdout
         """
@@ -172,10 +171,10 @@ class DodonaCommand(ABC):
         return False
 
     def __exit__(
-            self,
-            exc_type: Type[BaseException],
-            exc_val: BaseException,
-            exc_tb: TracebackType,
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> bool:
         """print the close message when exiting the 'with' block & handle enclosed exceptions
         If a DodonaException was thrown in the enclosed 'with' block, the 'handle_dodona_exception'
@@ -198,8 +197,9 @@ class DodonaCommandWithAccepted(DodonaCommand):
     def handle_dodona_exception(self, exception: DodonaException) -> bool:
         """update the accepted parameter based on the exception status"""
         if not hasattr(self.close_args, "accepted"):
-            accepted = exception.status["enum"] == ErrorType.CORRECT or exception.status[
-                "enum"] == ErrorType.CORRECT_ANSWER
+            accepted = (
+                exception.status["enum"] == ErrorType.CORRECT or exception.status["enum"] == ErrorType.CORRECT_ANSWER
+            )
             self.close_args.accepted = accepted
 
         return super().handle_dodona_exception(exception)
@@ -311,7 +311,7 @@ class Annotation(DodonaCommand):
     def __init__(self, row: int, text: str, **kwargs):
         super().__init__(row=row, text=text, **kwargs)
 
-    def start_msg(self) -> dict:
+    def start_msg(self) -> dict | None:
         """print the "annotate-code" command and parameters when entering the 'with' block"""
         return {"command": "annotate-code", **self.start_args.__dict__}
 
@@ -325,7 +325,7 @@ class SafeAnnotation(Annotation):
     def __init__(self, row: int, text: str, **kwargs):
         super().__init__(row=row, text=text, **kwargs)
 
-    def start_msg(self) -> Optional[dict]:
+    def start_msg(self) -> dict | None:
         """If the row number was less than 0, don't print the annotation"""
         if self.start_args.row < 0:
             return None

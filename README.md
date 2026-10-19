@@ -78,6 +78,10 @@ submission named `<case>.nl.s` runs with Dutch as natural language. When
 of the running image (`as --version`), the suite compares against (and
 `UPDATE_EXPECTED` rewrites) that file instead of `expected/<case>.json`.
 
+The code is linted and type-checked with ruff and ty: install them with
+`devel/install_dev_deps.sh`, run `devel/check.sh` to check and `devel/format.sh`
+to fix and format.
+
 ## Acknowledgements
 
 This judge was based on the work of four students of Ghent University for the cross-course project (vakoverschrijdend project ingenieurswetenschappen computerwetenschappen, 2022-2023):

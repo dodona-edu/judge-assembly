@@ -46,8 +46,7 @@ def judge_ignore():
             if os.path.isdir(os.path.join(directory, name)):
                 path += "/"
             # Only anchored patterns; a trailing slash matches directories only.
-            if any(fnmatch.fnmatchcase(path, p) or fnmatch.fnmatchcase(path, p + "/")
-                   for p in patterns):
+            if any(fnmatch.fnmatchcase(path, p) or fnmatch.fnmatchcase(path, p + "/") for p in patterns):
                 ignored.add(name)
         return ignored
 
@@ -57,7 +56,8 @@ def judge_ignore():
 def make_sandbox_root():
     # Dodona mounts everything under /mnt/<random>/.
     if not os.access("/mnt", os.W_OK):
-        raise RuntimeError("/mnt is not writable: run the suite as root, like CI")
+        message = "/mnt is not writable: run the suite as root, like CI"
+        raise RuntimeError(message)
     return tempfile.mkdtemp(dir="/mnt")
 
 
@@ -110,20 +110,19 @@ def dump(value):
 
 
 def diff(a, b, a_name, b_name):
-    return "".join(difflib.unified_diff(
-        a.splitlines(True), b.splitlines(True), a_name, b_name))
+    return "".join(difflib.unified_diff(a.splitlines(keepends=True), b.splitlines(keepends=True), a_name, b_name))
 
 
 def binutils_version():
     output = subprocess.run(["as", "--version"], capture_output=True, text=True, check=True).stdout
-    return re.search(r"([0-9]+\.[0-9]+)(\.[0-9]+)*$", output.splitlines()[0]).group(1)
+    return re.search(r"([0-9]+\.[0-9]+)(\.[0-9]+)*$", output.splitlines()[0]).group(1)  # ty: ignore[unresolved-attribute]
 
 
 def cases():
     for exercise in sorted(os.listdir(EXERCISES_DIR)):
         exercise_dir = os.path.join(EXERCISES_DIR, exercise)
         for submission in sorted(glob.glob(os.path.join(exercise_dir, "submissions", "*.s"))):
-            yield exercise, os.path.basename(submission)[:-len(".s")]
+            yield exercise, os.path.basename(submission)[: -len(".s")]
 
 
 class ExerciseTest(unittest.TestCase):
@@ -144,11 +143,13 @@ class ExerciseTest(unittest.TestCase):
         }
         with open(os.path.join(exercise_dir, "config.json")) as f:
             config.update(json.load(f))
-        config.update({
-            "programming_language": "assembly",
-            "natural_language": language,
-            "judge": self.judge,
-        })
+        config.update(
+            {
+                "programming_language": "assembly",
+                "natural_language": language,
+                "judge": self.judge,
+            }
+        )
         with sandbox(self.root, exercise_dir, submission) as paths:
             config.update(paths)
             return subprocess.run(
@@ -157,19 +158,18 @@ class ExerciseTest(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 cwd=paths["workdir"],
-                timeout=JUDGE_TIMEOUT)
+                timeout=JUDGE_TIMEOUT,
+            )
 
     def feedback(self, exercise_dir, submission, language):
         """The normalised feedback of one judge run, as JSON text."""
         process = self.run_judge(exercise_dir, submission, language)
-        self.assertEqual(
-            process.returncode, 0,
-            "judge exited with {}\nstderr:\n{}".format(process.returncode, process.stderr))
+        self.assertEqual(process.returncode, 0, f"judge exited with {process.returncode}\nstderr:\n{process.stderr}")
         self.assertEqual(process.stderr, "", "judge wrote to stderr")
         try:
             feedback = parse_commands(process.stdout)
         except json.JSONDecodeError as e:
-            self.fail("judge output is not JSON ({})\nstdout:\n{}".format(e, process.stdout))
+            self.fail(f"judge output is not JSON ({e})\nstdout:\n{process.stdout}")
         if not feedback:
             self.fail("judge wrote no feedback")
         return dump(normalise(feedback))
@@ -178,20 +178,20 @@ class ExerciseTest(unittest.TestCase):
         """<case>.binutils<major>.<minor>.json when it exists for the running
         binutils version, else <case>.json."""
         expected_dir = os.path.join(exercise_dir, "expected")
-        versioned = os.path.join(expected_dir, "{}.binutils{}.json".format(case, self.binutils_version))
+        versioned = os.path.join(expected_dir, f"{case}.binutils{self.binutils_version}.json")
         if os.path.exists(versioned):
             return versioned
         return os.path.join(expected_dir, case + ".json")
 
     def compare(self, expected_file, output):
         if not os.path.exists(expected_file):
-            self.fail("no expected output, run with UPDATE_EXPECTED=1 to create "
-                      + os.path.relpath(expected_file, REPO_DIR))
+            self.fail(
+                "no expected output, run with UPDATE_EXPECTED=1 to create " + os.path.relpath(expected_file, REPO_DIR)
+            )
         with open(expected_file) as f:
             expected = dump(json.load(f))
         if output != expected:
-            self.fail("output differs from the expected output:\n"
-                      + diff(expected, output, "expected", "actual"))
+            self.fail("output differs from the expected output:\n" + diff(expected, output, "expected", "actual"))
 
     def check_case(self, exercise, case):
         exercise_dir = os.path.join(EXERCISES_DIR, exercise)
@@ -210,8 +210,11 @@ class ExerciseTest(unittest.TestCase):
 
 
 for exercise, case in cases():
-    setattr(ExerciseTest, re.sub(r"\W", "_", "test_{}_{}".format(exercise, case)),
-            lambda self, exercise=exercise, case=case: self.check_case(exercise, case))
+    setattr(
+        ExerciseTest,
+        re.sub(r"\W", "_", f"test_{exercise}_{case}"),
+        lambda self, exercise=exercise, case=case: self.check_case(exercise, case),
+    )
 
 
 if __name__ == "__main__":

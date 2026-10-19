@@ -2,6 +2,8 @@ name: Integration test
 
 on:
   push:
+    branches: [ main ]
+  pull_request:
 
 permissions:
   contents: read
@@ -11,3 +13,18 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       ref: ${{ github.sha }}
+
+  integration-lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dodona-edu/dodona-assembly:latest
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install dev dependencies
+        run: ./devel/install_dev_deps.sh
+      - name: Run the linters
+        run: ./devel/check.sh
