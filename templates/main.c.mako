@@ -19,7 +19,46 @@ extern int ${tested_function}(${', '.join(tested_arguments)});
     #define MAGIC_8 ${random_magic_number_generator()}L
     #define MAGIC_9 ${random_magic_number_generator()}L
     #define MAGIC_10 ${random_magic_number_generator()}L
+
+    #if defined(__x86_64__) || defined(__i386__)
+        long frame_pointer_before, frame_pointer_after;
+        void *return_address;
+        extern int call_tested_function(${', '.join(tested_arguments)});
+        #define TESTED_FUNCTION call_tested_function
+        /* Restores the frame pointer, which main may depend on, and leaves the arguments in place */
+        #ifdef __x86_64__
+            __asm__(
+                ".pushsection .text\n"
+                "call_tested_function:\n"
+                "    popq return_address(%rip)\n"
+                "    movq %rbp, frame_pointer_before(%rip)\n"
+                "    call ${tested_function}\n"
+                "    movq %rbp, frame_pointer_after(%rip)\n"
+                "    movq frame_pointer_before(%rip), %rbp\n"
+                "    pushq return_address(%rip)\n"
+                "    ret\n"
+                ".popsection\n"
+            );
+        #else
+            __asm__(
+                ".pushsection .text\n"
+                "call_tested_function:\n"
+                "    popl return_address\n"
+                "    movl %ebp, frame_pointer_before\n"
+                "    call ${tested_function}\n"
+                "    movl %ebp, frame_pointer_after\n"
+                "    movl frame_pointer_before, %ebp\n"
+                "    pushl return_address\n"
+                "    ret\n"
+                ".popsection\n"
+            );
+        #endif
+    #endif
 % endif
+
+#ifndef TESTED_FUNCTION
+    #define TESTED_FUNCTION ${tested_function}
+#endif
 
 int main(int argc, char *argv[]) {
     /* Usage: ./main <testid> */
@@ -49,13 +88,8 @@ int main(int argc, char *argv[]) {
                     OPTIMIZER_HIDE_VAR(r13);
                     OPTIMIZER_HIDE_VAR(r14);
                     OPTIMIZER_HIDE_VAR(r15);
-                    long rbp_backup;
-                    __asm__ __volatile__("movq %%rbp, %0" : "=r" (rbp_backup));
-                    OPTIMIZER_HIDE_VAR(rbp_backup);
-                    (void) ${tested_function}(${format_arguments(test.arguments)});
+                    (void) TESTED_FUNCTION(${format_arguments(test.arguments)});
                     OPTIMIZER_BARRIER();
-                    long rbp_current;
-                    __asm__ __volatile__("movq %%rbp, %0" : "=r" (rbp_current));
                     long rbx_current = rbx;
                     long r12_current = r12;
                     long r13_current = r13;
@@ -67,7 +101,7 @@ int main(int argc, char *argv[]) {
                     count += r13_current != MAGIC_2;
                     count += r14_current != MAGIC_3;
                     count += r15_current != MAGIC_4;
-                    count += rbp_current != rbp_backup;
+                    count += frame_pointer_after != frame_pointer_before;
                     if (count > 0) {
                         fprintf(stderr, "%d register%s: ", count, count > 1 ? "s" : "");
                         if (rbx_current != MAGIC_0) { fprintf(stderr, "rbx"); if (--count > 0) fprintf(stderr, ", "); }
@@ -75,7 +109,7 @@ int main(int argc, char *argv[]) {
                         if (r13_current != MAGIC_2) { fprintf(stderr, "r13"); if (--count > 0) fprintf(stderr, ", "); }
                         if (r14_current != MAGIC_3) { fprintf(stderr, "r14"); if (--count > 0) fprintf(stderr, ", "); }
                         if (r15_current != MAGIC_4) { fprintf(stderr, "r15"); if (--count > 0) fprintf(stderr, ", "); }
-                        if (rbp_current != rbp_backup) { fprintf(stderr, "rbp"); }
+                        if (frame_pointer_after != frame_pointer_before) { fprintf(stderr, "rbp"); }
                     }
                 #elif defined(__i386__)
                     register int ebx __asm__("%ebx");
@@ -87,13 +121,8 @@ int main(int argc, char *argv[]) {
                     OPTIMIZER_HIDE_VAR(ebx);
                     OPTIMIZER_HIDE_VAR(esi);
                     OPTIMIZER_HIDE_VAR(edi);
-                    int ebp_backup;
-                    __asm__ __volatile__("movl %%ebp, %0" : "=r" (ebp_backup));
-                    OPTIMIZER_HIDE_VAR(ebp_backup);
-                    (void) ${tested_function}(${format_arguments(test.arguments)});
+                    (void) TESTED_FUNCTION(${format_arguments(test.arguments)});
                     OPTIMIZER_BARRIER();
-                    int ebp_current;
-                    __asm__ __volatile__("movl %%ebp, %0" : "=r" (ebp_current));
                     int ebx_current = ebx;
                     int esi_current = esi;
                     int edi_current = edi;
@@ -101,13 +130,13 @@ int main(int argc, char *argv[]) {
                     count += ebx_current != (int) MAGIC_0;
                     count += esi_current != (int) MAGIC_1;
                     count += edi_current != (int) MAGIC_2;
-                    count += ebp_current != ebp_backup;
+                    count += frame_pointer_after != frame_pointer_before;
                     if (count > 0) {
                         fprintf(stderr, "%d register%s: ", count, count > 1 ? "s" : "");
                         if (ebx_current != (int) MAGIC_0) { fprintf(stderr, "ebx"); if (--count > 0) fprintf(stderr, ", "); }
                         if (esi_current != (int) MAGIC_1) { fprintf(stderr, "esi"); if (--count > 0) fprintf(stderr, ", "); }
                         if (edi_current != (int) MAGIC_2) { fprintf(stderr, "edi"); if (--count > 0) fprintf(stderr, ", "); }
-                        if (ebp_current != ebp_backup) { fprintf(stderr, "ebp"); }
+                        if (frame_pointer_after != frame_pointer_before) { fprintf(stderr, "ebp"); }
                     }
                 #elif defined(__arm__)
                     register int r4 __asm__("%r4");
@@ -244,7 +273,7 @@ int main(int argc, char *argv[]) {
 
             int result;
             for (int i = 0; i < ${test_iterations}; ++i) {
-                result = ${tested_function}(${format_arguments(test.arguments)});
+                result = TESTED_FUNCTION(${format_arguments(test.arguments)});
             }
             printf("%d", result);
         }
