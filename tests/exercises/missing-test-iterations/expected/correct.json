@@ -1,0 +1,20 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "Configuration error: missing key 'test_iterations'.",
+      "format": "text",
+      "permission": "educator"
+    }
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "internal error",
+      "human": "Internal error"
+    }
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "tests": [
+    {"arguments": [0], "expected_return_value": 1},
+    {"arguments": [5], "expected_return_value": 4},
+    {"arguments": [10], "expected_return_value": 28}
+  ]
+}

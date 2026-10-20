@@ -113,7 +113,7 @@ class Translator:
         Language.EN: {
             Text.FAILED_TESTS: "{amount} test(s) failed.",
             Text.CONFIG_ERROR: "Configuration error: {msg}.",
-            Text.UNKNOWN_ARGUMENT_TYPE: "Onbekend argumenttype: {type}.",
+            Text.UNKNOWN_ARGUMENT_TYPE: "Unknown argument type: {ty}.",
             # descriptions
             Text.RETURN_VALUE: "Return value",
             Text.MEASURED_CYCLES: "Number of clock cycles to execute your code",
@@ -133,7 +133,7 @@ class Translator:
         Language.NL: {
             Text.FAILED_TESTS: "{amount} test(en) gefaald.",
             Text.CONFIG_ERROR: "Configuratiefout: {msg}.",
-            Text.UNKNOWN_ARGUMENT_TYPE: "Unknown argument type: {ty}.",
+            Text.UNKNOWN_ARGUMENT_TYPE: "Onbekend argumenttype: {ty}.",
             # descriptions
             Text.RETURN_VALUE: "Terugkeerwaarde",
             Text.MEASURED_CYCLES: "Aantal klokcycli om je code uit te voeren",

@@ -1,0 +1,20 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "Onbekend argumenttype: [1, 2].",
+      "format": "text",
+      "permission": "educator"
+    }
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "internal error",
+      "human": "Interne fout"
+    }
+  }
+]
