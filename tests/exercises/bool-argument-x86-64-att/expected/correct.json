@@ -1,0 +1,75 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "start-tab",
+    "title": "Feedback"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "choose(1, 3, 7)"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "3"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "3",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "start-context"
+  },
+  {
+    "command": "start-testcase",
+    "description": "choose(0, 3, 7)"
+  },
+  {
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "7"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "7",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "accepted": true,
+    "command": "close-testcase"
+  },
+  {
+    "accepted": true,
+    "command": "close-context"
+  },
+  {
+    "command": "close-tab"
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "correct",
+      "human": "All tests succeeded"
+    }
+  }
+]
