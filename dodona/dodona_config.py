@@ -66,15 +66,20 @@ class DodonaConfig(SimpleNamespace):
         self.plan_name = str(self.plan_name)
 
     def process_judge_specific_options(self):
-        self.assembly = AssemblyLanguage(self.assembly)
-        self.tested_function = str(self.tested_function)
-        self.test_iterations = int(self.test_iterations)
-        self.measure_performance = bool(self.measure_performance)
-        if self.measure_performance:
-            self.performance_cycle_factor_instructions = int(self.performance_cycle_factor_instructions)
-            self.performance_cycle_factor_data_reads = int(self.performance_cycle_factor_data_reads)
-            self.performance_cycle_factor_data_writes = int(self.performance_cycle_factor_data_writes)
-        self.check_calling_convention = bool(self.check_calling_convention)
+        try:
+            self.assembly = AssemblyLanguage(self.assembly)
+            self.tested_function = str(self.tested_function)
+            self.tested_arguments = list(self.tested_arguments)
+            self.test_iterations = int(self.test_iterations)
+            self.measure_performance = bool(self.measure_performance)
+            if self.measure_performance:
+                self.performance_cycle_factor_instructions = int(self.performance_cycle_factor_instructions)
+                self.performance_cycle_factor_data_reads = int(self.performance_cycle_factor_data_reads)
+                self.performance_cycle_factor_data_writes = int(self.performance_cycle_factor_data_writes)
+            self.check_calling_convention = bool(self.check_calling_convention)
+        except AttributeError as e:
+            message = f"missing key '{e.name}'"
+            raise ValueError(message) from e
 
     @classmethod
     def from_json(cls, json_file: TextIO) -> DodonaConfig:
