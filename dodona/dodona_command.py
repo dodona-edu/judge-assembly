@@ -3,11 +3,11 @@
 import json
 import sys
 from abc import ABC
-from enum import Enum
+from enum import StrEnum
 from types import SimpleNamespace, TracebackType
 
 
-class ErrorType(str, Enum):
+class ErrorType(StrEnum):
     """Dodona error type"""
 
     INTERNAL_ERROR = "internal error"
@@ -21,22 +21,16 @@ class ErrorType(str, Enum):
     CORRECT = "correct"
     CORRECT_ANSWER = "correct answer"
 
-    def __str__(self):
-        return str(self)
 
-
-class MessagePermission(str, Enum):
+class MessagePermission(StrEnum):
     """Dodona permission for a message"""
 
     STUDENT = "student"
     EDUCATOR = "educator"
     ZEUS = "zeus"
 
-    def __str__(self):
-        return str(self)
 
-
-class MessageFormat(str, Enum):
+class MessageFormat(StrEnum):
     """Dodona format for a message"""
 
     PLAIN = "plain"
@@ -50,19 +44,13 @@ class MessageFormat(str, Enum):
     CODE = "code"
     SQL = "sql"
 
-    def __str__(self):
-        return str(self)
 
-
-class AnnotationSeverity(str, Enum):
+class AnnotationSeverity(StrEnum):
     """Dodona severity of an annotation"""
 
     ERROR = "error"
     WARNING = "warning"
     INFO = "info"
-
-    def __str__(self):
-        return str(self)
 
 
 class DodonaException(Exception):
