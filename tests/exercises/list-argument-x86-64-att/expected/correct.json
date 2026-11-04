@@ -1,0 +1,20 @@
+[
+  {
+    "command": "start-judgement"
+  },
+  {
+    "command": "append-message",
+    "message": {
+      "description": "Unknown argument type: [1, 2].",
+      "format": "text",
+      "permission": "educator"
+    }
+  },
+  {
+    "command": "close-judgement",
+    "status": {
+      "enum": "internal error",
+      "human": "Internal error"
+    }
+  }
+]

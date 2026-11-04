@@ -93,6 +93,9 @@ def main():
         # Compile code
         try:
             test_program_path = run_compilation(config, plan, submission_file)
+        except UnknownArgumentTypeError as e:
+            unknown_argument_type(judge, config.translator, e.argument)
+            return
         except ValidationError as validation_error:
             compile_error(judge, config, validation_error.msg, line_shift)
             return
@@ -101,11 +104,7 @@ def main():
         with Tab("Feedback"):
             # Put each testcase in a separate context
             for test_id, test in enumerate(plan.tests):
-                try:
-                    formatted_arguments = format_arguments(test.arguments)
-                except UnknownArgumentTypeError as e:
-                    unknown_argument_type(judge, config.translator, e.argument)
-                    continue
+                formatted_arguments = format_arguments(test.arguments)
                 test_name = f"{config.tested_function}({formatted_arguments})"
                 with Context() as test_context, TestCase(test_name, format=MessageFormat.CODE) as test_case:
                     expected = str(test.expected_return_value)
