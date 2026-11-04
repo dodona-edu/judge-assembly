@@ -29,13 +29,6 @@
     "type": "error"
   },
   {
-    "command": "append-message",
-    "message": {
-      "description": "/tmp/workdir/submission.s: Assembler messages:\n/tmp/workdir/submission.s:5: Error: junk `(%esp)%ecx' after expression\n/tmp/workdir/submission.s:5: Error: number of operands mismatch for `mov'\n",
-      "format": "text"
-    }
-  },
-  {
     "accepted": false,
     "command": "close-judgement",
     "status": {
