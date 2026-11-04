@@ -136,7 +136,7 @@
     "command": "close-judgement",
     "status": {
       "enum": "wrong",
-      "human": "Test failed"
+      "human": "1 test(s) failed"
     }
   }
 ]

@@ -136,7 +136,7 @@
     "command": "close-judgement",
     "status": {
       "enum": "wrong",
-      "human": "Test gefaald"
+      "human": "2 test(en) gefaald"
     }
   }
 ]
