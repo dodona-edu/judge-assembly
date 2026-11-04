@@ -27,11 +27,24 @@
     }
   },
   {
-    "accepted": true,
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: rbp was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
     "command": "close-testcase"
   },
   {
-    "accepted": true,
+    "accepted": false,
     "command": "close-context"
   },
   {
@@ -55,11 +68,24 @@
     }
   },
   {
-    "accepted": true,
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: rbp was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
     "command": "close-testcase"
   },
   {
-    "accepted": true,
+    "accepted": false,
     "command": "close-context"
   },
   {
@@ -83,11 +109,24 @@
     }
   },
   {
-    "accepted": true,
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: rbp was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
+  },
+  {
+    "accepted": false,
     "command": "close-testcase"
   },
   {
-    "accepted": true,
+    "accepted": false,
     "command": "close-context"
   },
   {
@@ -96,8 +135,8 @@
   {
     "command": "close-judgement",
     "status": {
-      "enum": "correct",
-      "human": "All tests succeeded"
+      "enum": "wrong",
+      "human": "3 test(s) failed"
     }
   }
 ]

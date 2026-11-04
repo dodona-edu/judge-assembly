@@ -14,8 +14,30 @@
     "description": "narayana(0)"
   },
   {
-    "command": "append-message",
-    "message": "Crashed while testing"
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "1"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "1",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: ebp was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
   },
   {
     "accepted": false,
@@ -33,8 +55,30 @@
     "description": "narayana(5)"
   },
   {
-    "command": "append-message",
-    "message": "Crashed while testing"
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "4"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "4",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: ebp was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
   },
   {
     "accepted": false,
@@ -52,8 +96,30 @@
     "description": "narayana(10)"
   },
   {
-    "command": "append-message",
-    "message": "Crashed while testing"
+    "command": "start-test",
+    "description": "Return value",
+    "expected": "28"
+  },
+  {
+    "accepted": true,
+    "command": "close-test",
+    "generated": "28",
+    "status": {
+      "enum": "correct"
+    }
+  },
+  {
+    "command": "start-test",
+    "description": "Calling convention was violated",
+    "expected": ""
+  },
+  {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "1 register: ebp was/were not preserved",
+    "status": {
+      "enum": "wrong"
+    }
   },
   {
     "accepted": false,
