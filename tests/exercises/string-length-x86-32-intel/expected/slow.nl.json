@@ -11,7 +11,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "string_length(\"\")"
+    "description": {
+      "description": "string_length(\"\")",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
@@ -52,7 +55,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "string_length(\"dodona\")"
+    "description": {
+      "description": "string_length(\"dodona\")",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
@@ -93,7 +99,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "string_length(\"assembly language\")"
+    "description": {
+      "description": "string_length(\"assembly language\")",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",

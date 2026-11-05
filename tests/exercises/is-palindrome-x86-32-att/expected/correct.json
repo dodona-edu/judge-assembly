@@ -11,7 +11,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "is_palindrome(\"racecar\")"
+    "description": {
+      "description": "is_palindrome(\"racecar\")",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
@@ -52,7 +55,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "is_palindrome(\"abca\")"
+    "description": {
+      "description": "is_palindrome(\"abca\")",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
@@ -93,7 +99,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "is_palindrome(\"dodona\")"
+    "description": {
+      "description": "is_palindrome(\"dodona\")",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
