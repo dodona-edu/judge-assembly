@@ -106,7 +106,7 @@ def main():
             for test_id, test in enumerate(plan.tests):
                 formatted_arguments = format_arguments(test.arguments)
                 test_name = f"{config.tested_function}({formatted_arguments})"
-                with Context() as test_context, TestCase(test_name, format=MessageFormat.CODE) as test_case:
+                with Context() as test_context, TestCase(description=test_name, format=MessageFormat.CODE) as test_case:
                     expected = str(test.expected_return_value)
                     accepted = False
                     try:

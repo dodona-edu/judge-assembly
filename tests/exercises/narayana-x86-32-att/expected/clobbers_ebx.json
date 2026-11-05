@@ -11,7 +11,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "narayana(0)"
+    "description": {
+      "description": "narayana(0)",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
@@ -52,7 +55,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "narayana(5)"
+    "description": {
+      "description": "narayana(5)",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
@@ -93,7 +99,10 @@
   },
   {
     "command": "start-testcase",
-    "description": "narayana(10)"
+    "description": {
+      "description": "narayana(10)",
+      "format": "code"
+    }
   },
   {
     "command": "start-test",
