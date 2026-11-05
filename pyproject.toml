@@ -37,8 +37,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # main() is the judge's one straight-line flow; splitting it up is a refactor, not a lint fix.
 "assembly_judge.py" = ["C901", "PLR0915"]
-# Diverged copy shared across judges: formatting and autofixes only.
-"dodona/dodona_command.py" = ["B024", "SIM108"]
+# ABC without abstract methods: the base class is never entered as a 'with' block itself.
+"dodona/dodona_command.py" = ["B024"]
 # The asserts in sanity_check() are deliberate.
 "dodona/dodona_config.py" = ["S101"]
 # gcc's temp file name is matched literally, and unittest discover runs tests/ as a plain directory, not a package.
