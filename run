@@ -13,4 +13,7 @@ DIR="$(dirname $0)"
 ulimit -n -S 1024
 ulimit -n 4096
 
+# valgrind for arm-32 under qemu-arm can't place the client stack with a stack limit above 8 MB
+ulimit -S -s 8192
+
 python "$DIR/assembly_judge.py"
