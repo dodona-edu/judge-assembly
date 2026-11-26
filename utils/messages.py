@@ -58,6 +58,7 @@ def config_error(judge: SimpleNamespace, translator: Translator, msg: str):
         pass
 
     judge.status = translator.error_status(ErrorType.INTERNAL_ERROR)
+    judge.accepted = False
 
 
 def unknown_argument_type(judge: SimpleNamespace, translator: Translator, ty: str):
@@ -70,3 +71,4 @@ def unknown_argument_type(judge: SimpleNamespace, translator: Translator, ty: st
         pass
 
     judge.status = translator.error_status(ErrorType.INTERNAL_ERROR)
+    judge.accepted = False
